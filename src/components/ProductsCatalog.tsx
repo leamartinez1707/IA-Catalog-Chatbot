@@ -1,10 +1,15 @@
+
+"use client";
+
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import type { Product, ProductCatalogProps } from "@/types";
 
-const SAMPLE_PRODUCTS = [
+const SAMPLE_PRODUCTS: Product[] = [
   {
     id: 1,
     name: "Wireless Bluetooth Headphones",
@@ -67,13 +72,8 @@ const SAMPLE_PRODUCTS = [
   }
 ];
 
-interface ProductCatalogProps {
-  searchQuery: string;
-  onAddToCart: (product: any) => void;
-}
-
-export const ProductCatalog = ({ searchQuery, onAddToCart }: ProductCatalogProps) => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+export const ProductCatalog: React.FC<ProductCatalogProps> = ({ searchQuery, onAddToCart }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [favorites, setFavorites] = useState<number[]>([]);
 
   const categories = ["All", ...new Set(SAMPLE_PRODUCTS.map(p => p.category))];
@@ -118,12 +118,14 @@ export const ProductCatalog = ({ searchQuery, onAddToCart }: ProductCatalogProps
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts.map((product) => (
-          <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent">
             <CardHeader className="p-0 relative">
               <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
+                  width={300}
+                  height={300}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -171,9 +173,9 @@ export const ProductCatalog = ({ searchQuery, onAddToCart }: ProductCatalogProps
                 </span>
                 <Button 
                   onClick={() => onAddToCart(product)}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  <ShoppingCart className="w-4 h-4 mr-2 text-white" />
                   Add to Cart
                 </Button>
               </div>
@@ -190,5 +192,4 @@ export const ProductCatalog = ({ searchQuery, onAddToCart }: ProductCatalogProps
     </div>
   );
 };
-
 export default ProductCatalog;

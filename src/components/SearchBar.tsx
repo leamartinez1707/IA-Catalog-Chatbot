@@ -32,3 +32,4 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
     </form>
   );
 };
+export default SearchBar;

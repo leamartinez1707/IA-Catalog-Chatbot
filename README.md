@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# ShopSmart AI - Next.js Shopping Assistant
 
-First, run the development server:
+Una aplicación de tienda online con asistente de compras AI construida con Next.js 15, TypeScript y Tailwind CSS.
 
+## Características
+
+- 🤖 **Asistente AI de Compras**: Chat inteligente que ayuda a encontrar productos
+- 🛒 **Carrito de Compras**: Funcionalidad completa de carrito con gestión de cantidad
+- 🔍 **Búsqueda en Tiempo Real**: Filtrado instantáneo de productos
+- 📱 **Diseño Responsivo**: Optimizado para todos los dispositivos
+- 🎨 **UI Moderna**: Interfaces elegantes con componentes shadcn/ui
+- ⚡ **Alto Rendimiento**: Construido con Next.js App Router
+- 🔒 **TypeScript**: Completamente tipado para máxima seguridad
+
+## Tecnologías Utilizadas
+
+- **Next.js 15** - Framework de React con App Router
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Framework CSS utilitario
+- **shadcn/ui** - Componentes UI elegantes
+- **Radix UI** - Componentes primitivos accesibles
+- **Lucide React** - Iconos SVG
+- **TanStack Query** - Gestión de estado del servidor
+- **Sonner** - Notificaciones toast
+
+## Instalación
+
+1. Clona el repositorio:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <url-del-repositorio>
+cd ai-shopping-nextjs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instala las dependencias:
+```bash
+npm install
+# o
+yarn install
+# o
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Ejecuta el servidor de desarrollo:
+```bash
+npm run dev
+# o
+yarn dev
+# o
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## Learn More
+## Scripts Disponibles
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Inicia el servidor de desarrollo
+- `npm run build` - Construye la aplicación para producción
+- `npm run start` - Inicia el servidor de producción
+- `npm run lint` - Ejecuta el linter
+- `npm run type-check` - Verifica los tipos de TypeScript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura del Proyecto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+├── app/                   # App Router de Next.js
+│   ├── globals.css        # Estilos globales
+│   ├── layout.tsx         # Layout raíz
+│   └── page.tsx           # Página principal
+├── components/            # Componentes reutilizables
+│   ├── ui/                # Componentes base de UI
+│   ├── chat-assistant.tsx
+│   ├── product-catalog.tsx
+│   ├── search-bar.tsx
+│   └── shopping-cart.tsx
+├── lib/                  # Utilidades
+├── providers/            # Providers de contexto
+├── types/                # Definiciones de tipos TypeScript
+└── public/               # Archivos estáticos
+```
 
-## Deploy on Vercel
+## Características Principales
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Asistente AI de Compras
+- Chat conversacional que entiende las necesidades del usuario
+- Recomendaciones de productos basadas en preferencias
+- Respuestas contextuales e inteligentes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Catálogo de Productos
+- Grid responsivo de productos
+- Filtrado por categorías
+- Sistema de favoritos
+- Calificaciones y reseñas
+
+### Carrito de Compras
+- Gestión completa de cantidad
+- Cálculo automático de totales e impuestos
+- Interfaz intuitiva para agregar/remover productos
+
+### Búsqueda Avanzada
+- Búsqueda en tiempo real
+- Filtrado por nombre, descripción y categoría
+- Resultados instantáneos
+
+## Personalización
+
+### Agregar Nuevos Productos
+Modifica el array `SAMPLE_PRODUCTS` en `components/product-catalog.tsx`:
+
+```typescript
+const SAMPLE_PRODUCTS: Product[] = [
+  {
+    id: 1,
+    name: "Producto Nuevo",
+    price: 99.99,
+    category: "Categoría",
+    rating: 4.5,
+    image: "url-de-imagen",
+    description: "Descripción del producto",
+    features: ["Característica 1", "Característica 2"]
+  },
+  // ... más productos
+];
+```
+
+### Modificar Respuestas del AI
+Actualiza el objeto `SAMPLE_RESPONSES` en `components/chat-assistant.tsx` para personalizar las respuestas del asistente.
+
+## Despliegue
+
+Esta aplicación puede ser desplegada en cualquier plataforma que soporte Next.js:
+
+- **Vercel** (recomendado)
+- **Netlify**
+- **Railway**
+- **AWS**
+- **Google Cloud**
+
+Para desplegar en Vercel:
+```bash
+npm install -g vercel
+vercel
+```
+
+## Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-caracteristica`)
+3. Commit tus cambios (`git commit -am 'Agrega nueva característica'`)
+4. Push a la rama (`git push origin feature/nueva-caracteristica`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.

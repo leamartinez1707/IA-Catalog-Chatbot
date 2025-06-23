@@ -1,24 +1,19 @@
+
+"use client";
+
 import { X, Plus, Minus, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import type { ShoppingCartProps } from "@/types";
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-}
-
-interface ShoppingCartProps {
-  items: CartItem[];
-  onClose: () => void;
-  onRemoveItem: (id: number) => void;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-}
-
-export const ShoppingCart = ({ items, onClose, onRemoveItem, onUpdateQuantity }: ShoppingCartProps) => {
+export const ShoppingCart: React.FC<ShoppingCartProps> = ({ 
+  items, 
+  onClose, 
+  onRemoveItem, 
+  onUpdateQuantity 
+}) => {
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + tax;
@@ -47,9 +42,11 @@ export const ShoppingCart = ({ items, onClose, onRemoveItem, onUpdateQuantity }:
                 <Card key={item.id} className="p-4">
                   <div className="flex items-center space-x-4">
                     {item.image && (
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 object-cover rounded-lg"
                       />
                     )}
@@ -122,3 +119,4 @@ export const ShoppingCart = ({ items, onClose, onRemoveItem, onUpdateQuantity }:
     </div>
   );
 };
+export default ShoppingCart;

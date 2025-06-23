@@ -1,22 +1,13 @@
+
+"use client";
+
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { X, Send, Bot, User, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-
-interface ChatAssistantProps {
-  onClose: () => void;
-  onAddToCart: (product: any) => void;
-}
-
-interface Message {
-  id: number;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-  productRecommendation?: any;
-}
+import type { ChatAssistantProps, Message, Product } from "@/types";
 
 const SAMPLE_RESPONSES = {
   greeting: "Hello! I'm your AI shopping assistant. I can help you find the perfect products based on your needs. What are you looking for today?",
@@ -29,7 +20,7 @@ const SAMPLE_RESPONSES = {
   default: "I'd be happy to help you find what you're looking for! Could you tell me more about your preferences or budget?"
 };
 
-export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
+export const ChatAssistant: React.FC<ChatAssistantProps> = ({ onClose, onAddToCart }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -38,8 +29,8 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
       timestamp: new Date()
     }
   ]);
-  const [inputValue, setInputValue] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -50,7 +41,7 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
     scrollToBottom();
   }, [messages]);
 
-  const generateResponse = (userInput: string): { text: string; productRecommendation?: any } => {
+  const generateResponse = (userInput: string): { text: string; productRecommendation?: Product } => {
     const input = userInput.toLowerCase();
     
     if (input.includes("hello") || input.includes("hi") || input.includes("hey")) {
@@ -64,7 +55,11 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
           id: 1,
           name: "Wireless Bluetooth Headphones",
           price: 79.99,
-          image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop"
+          category: "Electronics",
+          rating: 4.5,
+          image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop",
+          description: "Premium quality wireless headphones with noise cancellation",
+          features: ["Noise Cancelling", "30h Battery", "Quick Charge"]
         }
       };
     }
@@ -76,7 +71,11 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
           id: 3,
           name: "Organic Cotton T-Shirt",
           price: 24.99,
-          image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop"
+          category: "Clothing",
+          rating: 4.3,
+          image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop",
+          description: "Comfortable and sustainable organic cotton t-shirt",
+          features: ["100% Organic", "Machine Washable", "Multiple Colors"]
         }
       };
     }
@@ -88,7 +87,11 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
           id: 4,
           name: "JavaScript Programming Book",
           price: 39.99,
-          image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150&h=150&fit=crop"
+          category: "Books",
+          rating: 4.8,
+          image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150&h=150&fit=crop",
+          description: "Learn modern JavaScript programming from scratch",
+          features: ["Beginner Friendly", "500+ Pages", "Code Examples"]
         }
       };
     }
@@ -104,7 +107,11 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
           id: 6,
           name: "Yoga Mat",
           price: 49.99,
-          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=150&h=150&fit=crop"
+          category: "Sports",
+          rating: 4.4,
+          image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=150&h=150&fit=crop",
+          description: "Non-slip yoga mat perfect for all types of exercise",
+          features: ["Non-Slip", "Eco-Friendly", "6mm Thick"]
         }
       };
     }
@@ -142,7 +149,7 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
     }, 1500);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSendMessage();
     }
@@ -195,9 +202,11 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
                   {message.productRecommendation && (
                     <Card className="p-3 border border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <img
+                        <Image
                           src={message.productRecommendation.image}
                           alt={message.productRecommendation.name}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 object-cover rounded"
                         />
                         <div className="flex-1">
@@ -206,7 +215,7 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
                         </div>
                         <Button
                           size="sm"
-                          onClick={() => onAddToCart(message.productRecommendation)}
+                          onClick={() => onAddToCart(message.productRecommendation!)}
                           className="bg-green-500 hover:bg-green-600"
                         >
                           <ShoppingCart className="w-4 h-4" />
@@ -263,3 +272,5 @@ export const ChatAssistant = ({ onClose, onAddToCart }: ChatAssistantProps) => {
     </div>
   );
 };
+
+export default ChatAssistant;
