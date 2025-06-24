@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 
 export interface Product {
   id: number;
@@ -29,6 +30,20 @@ export interface SearchBarProps {
 export interface ProductCatalogProps {
   searchQuery: string;
   onAddToCart: (product: Product) => void;
+  selectedCategory: string
+  setSelectedCategory: Dispatch<SetStateAction<string>>
+  setFavorites: Dispatch<SetStateAction<number[]>>
+  favorites: number[];
+}
+
+export interface HeaderProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  showChat: boolean;
+  setShowChat: (show: boolean) => void;
+  cartItemCount: number;
+  setShowCart: (show: boolean) => void;
+  showCart: boolean;
 }
 
 export interface ShoppingCartProps {
