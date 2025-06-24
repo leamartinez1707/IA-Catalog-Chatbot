@@ -1,12 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import type { ProductCatalogProps } from "@/types";
 import ProductCard from "./products/ProductCard";
-import { supabase } from "@/utils/supabase/server";
+import api from "@/app/api/api";
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = async ({ searchQuery, onAddToCart, selectedCategory, setSelectedCategory, favorites, setFavorites }) => {
 
-  const { data } = await supabase.from('products').select('*');
-
+  const data = await api.getCatalog()
+  console.log("Catalog data:", data);
   const categories = ["All", ...new Set(data?.map(p => p.category))];
 
   const filteredProducts = data?.filter(product => {
