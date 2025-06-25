@@ -3,12 +3,12 @@ import { Dispatch, SetStateAction } from "react";
 export interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
   category: string;
-  rating: number;
   image: string;
-  description: string;
-  features: string[];
+  rating: number;
+  features: string;
 }
 
 export interface CartItem extends Product {
@@ -28,6 +28,7 @@ export interface SearchBarProps {
 }
 
 export interface ProductCatalogProps {
+  initialProducts: Product[];
   searchQuery: string;
   onAddToCart: (product: Product) => void;
   selectedCategory: string
@@ -54,6 +55,7 @@ export interface ShoppingCartProps {
 }
 
 export interface ChatAssistantProps {
+  products: Product[];
   onClose: () => void;
   onAddToCart: (product: Product) => void;
 }

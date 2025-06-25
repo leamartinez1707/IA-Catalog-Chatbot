@@ -1,17 +1,23 @@
 import { Product } from "@/types";
-import { supabase } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
+const supabase = await createClient();
 const api = {
-    async getCatalog() {
+    async getCatalog(): Promise<Product[]> {
         try {
-            const { data, error } = await supabase.from('products').select('*');
+
+            const { data: products, error } = await supabase
+                .from('products')
+                .select('*')
             if (error) {
                 throw new Error(`Error fetching item details: ${error.message}`);
             }
-            if (!data) {
+            if (!products) {
                 throw new Error('Item not found');
             }
-            return data as Product[];
+
+
+            return products as Product[];
         } catch (error) {
             console.error('Error fetching catalog:', error);
             throw new Error(`Error fetching catalog: ${error instanceof Error ? error.message : 'Unknown error'}`);

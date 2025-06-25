@@ -56,7 +56,7 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                     <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
 
                     <div className="flex flex-wrap gap-1">
-                        {product?.features?.slice(0, 2).map((feature, index) => (
+                        {product?.features?.split(',').map((feature, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
                                 {feature}
                             </Badge>
