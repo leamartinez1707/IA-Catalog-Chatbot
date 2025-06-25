@@ -5,6 +5,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "sonner";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

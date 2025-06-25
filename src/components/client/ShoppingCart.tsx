@@ -20,7 +20,7 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in">
+      <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white py-0">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">Shopping Cart ({items.length} items)</h2>

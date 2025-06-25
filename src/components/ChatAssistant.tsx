@@ -1,32 +1,38 @@
 "use client";
 
-import { useState } from "react";
-import { X, Send, Bot, User } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { X, Send, Bot, User, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ChatAssistantProps } from "@/types";
+import { ChatAssistantProps, Product } from "@/types";
+import Image from "next/image";
 // import type { ChatAssistantProps, Message, Product } from "@/types";
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  product: Product | null;
+}
+
 export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantProps) => {
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
-    { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?' }
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?', product: null }
   ])
   const [inputValue, setInputValue] = useState<string>("");
-  const [isTyping,] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
 
     const newMessages = [
       ...messages,
-      { role: 'user', content: inputValue } as const
+      { role: 'user', content: inputValue, product: null } as const
     ];
 
     setMessages(newMessages)
     setInputValue('')
-    setLoading(true)
+    setIsTyping(true)
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -35,15 +41,15 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
       })
 
       const data = await res.json()
-      if (data.reply) {
-        setMessages([...newMessages, { role: 'assistant', content: data.reply }])
+      if (data.reply && data.product) {
+        setMessages([...newMessages, { role: 'assistant', content: data.reply, product: data.product }]);
+      } else {
+        setMessages([...newMessages, { role: 'assistant', content: data.reply, product: null }]);
       }
     } catch (err) {
       console.error(err)
     } finally {
-
-      setLoading(false)
-
+      setIsTyping(false)
     }
   }
 
@@ -52,12 +58,17 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
       handleSendMessage();
     }
   };
+  const chatEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white">
+      <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white shadow-lg shadow-black">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-purple-600 text-white">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
               <Bot className="w-6 h-6" />
@@ -95,31 +106,31 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
                   >
                     <p className="text-sm">{message.content}</p>
                   </div>
-
-                  {/* {message.productRecommendation && (
-                    <Card className="p-3 border border-gray-200">
+                  {message?.product && (
+                    <Card key={message.product.id} className="p-3 border border-gray-200">
                       <div className="flex items-center space-x-3">
                         <Image
-                          src={message.productRecommendation.image}
-                          alt={message.productRecommendation.name}
+                          src={message.product.image}
+                          alt={message.product.name}
                           width={48}
                           height={48}
                           className="w-12 h-12 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <h4 className="font-medium text-sm">{message.productRecommendation.name}</h4>
-                          <p className="text-blue-600 font-semibold">${message.productRecommendation.price}</p>
+                          <h4 className="font-medium text-sm">{message.product.name}</h4>
+                          <p className="text-blue-600 font-semibold">${message.product.price}</p>
                         </div>
                         <Button
-                          size="sm"
-                          onClick={() => onAddToCart(message.productRecommendation!)}
-                          className="bg-green-500 hover:bg-green-600"
+                          size={'sm'}
+                          onClick={() => onAddToCart(message.product!)}
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         >
-                          <ShoppingCart className="w-4 h-4" />
+                          <ShoppingCart className="w-4 h-4 mr-2 text-white" />
+                          Add to Cart
                         </Button>
                       </div>
                     </Card>
-                  )} */}
+                  )}
                 </div>
 
                 {message.role === 'user' && (
@@ -128,6 +139,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
                   </div>
                 )}
               </div>
+              <div ref={chatEndRef} />
             </div>
           ))}
 
@@ -150,7 +162,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
         </div>
 
         {/* Input */}
-        <div className="p-4 border-t">
+        < div className="p-4 border-t" >
           <div className="flex space-x-2">
             <Input
               value={inputValue}

@@ -19,7 +19,9 @@ export const POST = async (req: NextRequest) => {
         .join('\n')
     const systemMessage: ChatCompletionMessageParam = {
         role: 'system',
-        content: `Sos un asistente de compras. Estos son los productos disponibles:\n${productContext}\nUsá esta información para recomendar productos o responder consultas.`,
+        content: `Sos un asistente de compras. Estos son los productos disponibles:\n${productContext}\nUsá esta información para recomendar productos o responder consultas.
+        Siempre que recomiendes un producto, asegurate de mencionarlo por su nombre real en el idioma original, no lo traduzcas ni lo modifiques.
+        `,
     }
     const lastMessages: ChatCompletionMessageParam[] = messages.slice(-5).map(m => ({
         role: m.role as 'user' | 'assistant' | 'system',
@@ -38,8 +40,15 @@ export const POST = async (req: NextRequest) => {
         })
 
         const reply = completion.choices[0]?.message.content
-        console.log('OpenAI Response:', reply)
-        return NextResponse.json({ reply })
+        // 🔍 Intentamos encontrar el producto mencionado por la IA
+        if (!reply) {
+            return NextResponse.json({ reply: 'Sorry, I couldnt find what you are searching for.. try again please.' },
+                { status: 400 })
+        }
+        const recommendedProduct = (products as Product[]).find(p =>
+            reply.toLowerCase().includes(p.name.toLowerCase())
+        )
+        return NextResponse.json({ reply, product: recommendedProduct ?? null }, { status: 200 })
     } catch (error) {
         console.error('OpenAI Error:', error)
         return NextResponse.json({ error: 'Error generating response' }, { status: 500 })

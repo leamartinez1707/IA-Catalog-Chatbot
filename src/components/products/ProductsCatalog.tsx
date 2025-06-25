@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import type { ProductCatalogProps } from "@/types";
-import ProductCard from "./products/ProductCard";
+import ProductCard from "@/components/products/ProductCard";
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts: data, searchQuery, onAddToCart, selectedCategory, setSelectedCategory, favorites, setFavorites }) => {
 

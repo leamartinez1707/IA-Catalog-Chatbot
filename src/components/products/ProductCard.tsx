@@ -17,7 +17,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: ProductCardProps) => {
     return (
-        <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent">
+        <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">
                 <div className="aspect-square overflow-hidden rounded-t-lg">
                     <Image
