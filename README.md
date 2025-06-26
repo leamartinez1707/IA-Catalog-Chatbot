@@ -63,20 +63,30 @@ pnpm dev
 ## Estructura del Proyecto
 
 ```
-├── app/                   # App Router de Next.js
-│   ├── globals.css        # Estilos globales
-│   ├── layout.tsx         # Layout raíz
-│   └── page.tsx           # Página principal
-├── components/            # Componentes reutilizables
-│   ├── ui/                # Componentes base de UI
-│   ├── chat-assistant.tsx
-│   ├── product-catalog.tsx
-│   ├── search-bar.tsx
-│   └── shopping-cart.tsx
-├── lib/                  # Utilidades
-├── providers/            # Providers de contexto
-├── types/                # Definiciones de tipos TypeScript
-└── public/               # Archivos estáticos
+├── src/                   # Código fuente principal
+│   ├── app/               # App Router de Next.js
+│   │   ├── globals.css    # Estilos globales
+│   │   ├── layout.tsx     # Layout raíz
+│   │   ├── page.tsx       # Página principal
+│   │   └── api/           # API Routes
+│   │       └── chat/      # Endpoints del chat
+│   ├── components/        # Componentes reutilizables
+│   ├── lib/               # Utilidades y configuraciones
+│   │   ├── utils.ts       # Funciones utilitarias
+│   │   └── supabase/      # Configuración de Supabase
+│   │       ├── server.ts
+│   │       └── api/       # Peticiones de Supabase
+│   │           └── index.ts
+│   ├── providers/         # Providers de contexto
+│   ├── types/             # Definiciones de tipos TypeScript
+├── public/                # Archivos estáticos
+├── components.json        # Configuración de shadcn/ui
+├── eslint.config.mjs      # Configuración de ESLint
+├── next.config.ts         # Configuración de Next.js
+├── package.json           # Dependencias y scripts
+├── postcss.config.mjs     # Configuración de PostCSS
+├── tsconfig.json          # Configuración de TypeScript
+└── README.md              # Documentación del proyecto
 ```
 
 ## Características Principales
@@ -102,32 +112,7 @@ pnpm dev
 - Filtrado por nombre, descripción y categoría
 - Resultados instantáneos
 
-## Personalización
-
-### Agregar Nuevos Productos
-Modifica el array `SAMPLE_PRODUCTS` en `components/product-catalog.tsx`:
-
-```typescript
-const SAMPLE_PRODUCTS: Product[] = [
-  {
-    id: 1,
-    name: "Producto Nuevo",
-    price: 99.99,
-    category: "Categoría",
-    rating: 4.5,
-    image: "url-de-imagen",
-    description: "Descripción del producto",
-    features: ["Característica 1", "Característica 2"]
-  },
-  // ... más productos
-];
-```
-
-### Modificar Respuestas del AI
-Actualiza el objeto `SAMPLE_RESPONSES` en `components/chat-assistant.tsx` para personalizar las respuestas del asistente.
-
 ## Despliegue
-
 Esta aplicación puede ser desplegada en cualquier plataforma que soporte Next.js:
 
 - **Vercel** (recomendado)

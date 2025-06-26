@@ -1,10 +1,11 @@
 import { Product } from "@/types";
 import { createClient } from "@/lib/supabase/server";
 
-const supabase = await createClient();
+
 const api = {
     async getCatalog(): Promise<Product[]> {
         try {
+            const supabase = await createClient();
 
             const { data: products, error } = await supabase
                 .from('products')
@@ -26,6 +27,7 @@ const api = {
 
     async getItemDetails(itemId: Pick<Product, 'id'>) {
         try {
+            const supabase = await createClient();
             const { data, error } = await supabase.from('products').select('*').eq('id', itemId.id).single();
             if (error) {
                 throw new Error(`Error fetching item details: ${error.message}`);

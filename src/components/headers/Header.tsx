@@ -1,5 +1,5 @@
 import { ShoppingBag, MessageCircle } from "lucide-react";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/headers/SearchBar";
 import { Button } from "@/components/ui/button";
 import { HeaderProps } from "@/types";
 import Link from "next/link";

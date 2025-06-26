@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 import ProductCatalog from "@/components/products/ProductsCatalog";
-import ChatAssistant from "@/components/ChatAssistant";
+import ChatAssistant from "@/components/client/ChatAssistant";
 import ShoppingCart from "@/components/client/ShoppingCart";
 import type { CartItem, Product } from "@/types";
 import Header from "@/components/headers/Header";
