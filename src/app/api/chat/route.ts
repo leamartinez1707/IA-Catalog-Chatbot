@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
     const systemMessage: ChatCompletionMessageParam = {
         role: 'system',
         content: `Sos un asistente de compras. Estos son los productos disponibles:\n${productContext}\nUsá esta información para recomendar productos o responder consultas.
-        Siempre que recomiendes un producto, asegurate de mencionarlo por su nombre real en el idioma original, no lo traduzcas ni lo modifiques.
+        Siempre que recomiendes un producto, asegurate de mencionarlo por su nombre real en el idioma original, no lo traduzcas ni lo modifiques. Si el cliente te pide que le recomiendes otro producto, asegurate de que sea uno de los productos disponibles en la lista y no repitas el mismo producto que ya le recomendaste.
         `,
     }
     const lastMessages: ChatCompletionMessageParam[] = messages.slice(-5).map(m => ({
