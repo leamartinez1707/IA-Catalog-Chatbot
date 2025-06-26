@@ -32,8 +32,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts:
         {categories.map(category => (
           <Badge
             key={category}
-            variant={selectedCategory === category ? "default" : "secondary"}
-            className="cursor-pointer hover:scale-105 transition-transform px-4 py-2"
+            className={`${selectedCategory.toLowerCase() == category.toLowerCase() ? 'bg-black/10 font-bold' : 'bg-black/5'} cursor-pointer hover:scale-105 transition-transform px-4 py-2 capitalize rounded-lg`}
             onClick={() => setSelectedCategory(category)}
           >
             {category}
@@ -41,6 +40,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts:
         ))}
       </div>
       {/* Products Grid */}
+      <p>Filtered by: <span className="capitalize"> {selectedCategory ? selectedCategory : ''}</span></p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts?.map((product) => (
           <ProductCard

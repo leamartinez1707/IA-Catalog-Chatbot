@@ -16,16 +16,18 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: ProductCardProps) => {
+    console.log('Rendering ProductCard for:', product.image)
     return (
         <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">
                 <div className="aspect-square overflow-hidden rounded-t-lg">
                     <Image
-                        src={product.image}
+                        src={product.image ? product.image : '/broken-image.png'}
                         alt={product.name}
                         width={300}
                         height={300}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+
                     />
                 </div>
                 <Button

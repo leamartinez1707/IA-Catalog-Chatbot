@@ -67,8 +67,8 @@ const ClientHome = ({ initialProducts: products }: { initialProducts: Product[] 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8 text-center">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                        Find Your Perfect Product
+                    <h2 className="text-6xl py-4 font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        AI-Powered eCommerce
                     </h2>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                         Discover amazing products with the help of our AI shopping assistant.

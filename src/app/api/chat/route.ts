@@ -40,7 +40,7 @@ export const POST = async (req: NextRequest) => {
         })
 
         const reply = completion.choices[0]?.message.content
-        // 🔍 Intentamos encontrar el producto mencionado por la IA
+        // Try to find a recommended product based on the reply
         if (!reply) {
             return NextResponse.json({ reply: 'Sorry, I couldnt find what you are searching for.. try again please.' },
                 { status: 400 })
