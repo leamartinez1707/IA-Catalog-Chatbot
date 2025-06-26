@@ -168,6 +168,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyPress}
+              maxLength={150}
               placeholder="Ask me about products, recommendations, or anything else..."
               className="flex-1"
             />
