@@ -16,7 +16,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: ProductCardProps) => {
-    console.log('Rendering ProductCard for:', product.image)
+
     return (
         <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">

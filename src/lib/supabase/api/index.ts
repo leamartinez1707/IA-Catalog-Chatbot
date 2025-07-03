@@ -6,7 +6,6 @@ const api = {
     async getCatalog(): Promise<Product[]> {
         try {
             const supabase = await createClient();
-
             const { data: products, error } = await supabase
                 .from('products')
                 .select('*')
@@ -16,8 +15,6 @@ const api = {
             if (!products) {
                 throw new Error('Item not found');
             }
-
-
             return products as Product[];
         } catch (error) {
             console.error('Error fetching catalog:', error);

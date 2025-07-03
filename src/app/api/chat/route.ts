@@ -4,7 +4,7 @@ import type { ChatCompletionMessageParam } from 'openai/resources/chat/completio
 import { Product } from '@/types'
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 })
 
 export const POST = async (req: NextRequest) => {
