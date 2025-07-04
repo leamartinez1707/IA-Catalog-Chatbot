@@ -1,6 +1,6 @@
 'use client'
 
-import useAppStore from '@/store'
+import { useAppStore } from '@/store'
 import FavoritesItem from './FavoritesItem'
 
 const FavoritesList = () => {

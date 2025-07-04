@@ -1,10 +1,13 @@
+'use client'
 import { ShoppingBag, MessageCircle, Star } from "lucide-react";
 import SearchBar from "@/components/headers/SearchBar";
 import { Button } from "@/components/ui/button";
-import { HeaderProps } from "@/types";
 import Link from "next/link";
+import ShoppingCart from "@/components/client/ShoppingCart";
+import { useAppStore } from "@/store";
 
-const Header = ({ setSearchQuery, cartItemCount, setShowChat, showChat, setShowCart, showCart }: HeaderProps) => {
+const Header = () => {
+    const { setShowChat, showChat, setShowCart, showCart, setSearchQuery } = useAppStore()
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,11 +47,11 @@ const Header = ({ setSearchQuery, cartItemCount, setShowChat, showChat, setShowC
                         >
                             <ShoppingBag className="w-5 h-5 mr-2" />
                             Cart
-                            {cartItemCount > 0 && (
+                            {/* {cartItemCount > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                                     {cartItemCount}
                                 </span>
-                            )}
+                            )} */}
                         </Button>
                     </div>
                 </div>
@@ -56,6 +59,12 @@ const Header = ({ setSearchQuery, cartItemCount, setShowChat, showChat, setShowC
                     <SearchBar onSearch={setSearchQuery} />
                 </div>
             </div>
+            {/* Shopping Cart */}
+            {showCart && (
+                <ShoppingCart
+                    onClose={() => setShowCart(false)}
+                />
+            )}
         </header>
     )
 }

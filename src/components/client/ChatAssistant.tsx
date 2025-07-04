@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ChatAssistantProps, Product } from "@/types";
 import Image from "next/image";
+import { useAppStore } from "@/store";
 // import type { ChatAssistantProps, Message, Product } from "@/types";
 
 interface ChatMessage {
@@ -15,12 +16,15 @@ interface ChatMessage {
   product: Product | null;
 }
 
-export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantProps) => {
+export const ChatAssistant = ({ products }: ChatAssistantProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?', product: null }
   ])
   const [inputValue, setInputValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
+
+  const addToCart = useAppStore((state) => state.addToCart);
+  const showChat = useAppStore((state) => state.setShowChat);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
@@ -78,7 +82,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
               <p className="text-sm text-blue-100">Online and ready to help</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/10">
+          <Button variant="ghost" size="sm" onClick={() => showChat(false)} className="text-white hover:bg-white/10">
             <X className="w-5 h-5" />
           </Button>
         </div>
@@ -122,7 +126,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
                         </div>
                         <Button
                           size={'sm'}
-                          onClick={() => onAddToCart(message.product!)}
+                          onClick={() => addToCart(message.product!)}
                           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         >
                           <ShoppingCart className="w-4 h-4 mr-2 text-white" />

@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { CartItem, ShoppingCartProps } from "@/types";
-import useAppStore from "@/store";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useAppStore } from "@/store";
 
 export const ShoppingCart: React.FC<ShoppingCartProps> = ({
   onClose,
@@ -39,7 +39,7 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
       <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white py-0">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">

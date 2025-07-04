@@ -7,8 +7,8 @@ import { Button } from '../ui/button'
 import { Product } from '@/types'
 import { Badge } from '../ui/badge'
 import Image from 'next/image'
-import useAppStore from '@/store'
 import { toast } from 'sonner'
+import { useAppStore } from '@/store'
 
 interface ProductCardProps {
     product: Product
@@ -51,7 +51,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <CardContent className="p-4">
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs capitalize">
                             {product.category}
                         </Badge>
                         <div className="flex items-center space-x-1">
