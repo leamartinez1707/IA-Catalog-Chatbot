@@ -8,11 +8,11 @@ import { useAppStore } from "@/store";
 
 const Header = () => {
     const { setShowChat, showChat, setShowCart, showCart, setSearchQuery } = useAppStore()
+    const cartLength = useAppStore((state) => state.cart).length
     return (
-        <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 py-4 sm:h-40 md:h-fit shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-                <div className="flex items-center justify-between h-16">
+                <div className="flex flex-col md:flex-row items-center gap-y-4 md:justify-between">
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2">
                             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
@@ -47,15 +47,15 @@ const Header = () => {
                         >
                             <ShoppingBag className="w-5 h-5 mr-2" />
                             Cart
-                            {/* {cartItemCount > 0 && (
+                            {cartLength > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                                    {cartItemCount}
+                                    {cartLength}
                                 </span>
-                            )} */}
+                            )}
                         </Button>
                     </div>
                 </div>
-                <div className="flex-1 max-w-2xl mx-8 md:mx-0 my-4">
+                <div className="flex-1 max-w-2xl md:max-w-md mx-8 md:mx-0 mt-4">
                     <SearchBar onSearch={setSearchQuery} />
                 </div>
             </div>

@@ -37,7 +37,3 @@ export interface HeaderProps {
 export interface ShoppingCartProps {
   onClose: () => void;
 }
-
-export interface ChatAssistantProps {
-  products: Product[];
-}

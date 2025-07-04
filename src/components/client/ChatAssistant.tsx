@@ -5,9 +5,11 @@ import { X, Send, Bot, User, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ChatAssistantProps, Product } from "@/types";
+import { Product } from "@/types";
 import Image from "next/image";
 import { useAppStore } from "@/store";
+import { useProducts } from "@/hooks/products/useProducts";
+import { toast } from "sonner";
 // import type { ChatAssistantProps, Message, Product } from "@/types";
 
 interface ChatMessage {
@@ -16,7 +18,7 @@ interface ChatMessage {
   product: Product | null;
 }
 
-export const ChatAssistant = ({ products }: ChatAssistantProps) => {
+export const ChatAssistant = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?', product: null }
   ])
@@ -24,7 +26,11 @@ export const ChatAssistant = ({ products }: ChatAssistantProps) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const addToCart = useAppStore((state) => state.addToCart);
-  const showChat = useAppStore((state) => state.setShowChat);
+  const showChat = useAppStore((state) => state.showChat);
+  const setShowChat = useAppStore((state) => state.setShowChat);
+
+  const { products } = useProducts();
+
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
@@ -68,6 +74,12 @@ export const ChatAssistant = ({ products }: ChatAssistantProps) => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  if (!showChat) return null;
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+    toast.success(`${product.name} has been added to your cart!`)
+  }
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white shadow-lg shadow-black">
@@ -82,7 +94,7 @@ export const ChatAssistant = ({ products }: ChatAssistantProps) => {
               <p className="text-sm text-blue-100">Online and ready to help</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => showChat(false)} className="text-white hover:bg-white/10">
+          <Button variant="ghost" size="sm" onClick={() => setShowChat(false)} className="text-white hover:bg-white/10">
             <X className="w-5 h-5" />
           </Button>
         </div>
@@ -126,7 +138,7 @@ export const ChatAssistant = ({ products }: ChatAssistantProps) => {
                         </div>
                         <Button
                           size={'sm'}
-                          onClick={() => addToCart(message.product!)}
+                          onClick={() => handleAddToCart(message.product!)}
                           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         >
                           <ShoppingCart className="w-4 h-4 mr-2 text-white" />

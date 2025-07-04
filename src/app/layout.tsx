@@ -5,7 +5,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "sonner";
 import Header from "@/components/headers/Header";
-
+import ChatAssistant from "@/components/client/ChatAssistant";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +25,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <Header />
+          <ChatAssistant />
           {children}
           <Toaster richColors position="top-right" />
         </QueryProvider>
