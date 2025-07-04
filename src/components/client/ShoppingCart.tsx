@@ -6,17 +6,37 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { ShoppingCartProps } from "@/types";
+import type { CartItem, ShoppingCartProps } from "@/types";
+import useAppStore from "@/store";
+import { toast } from "sonner";
+import Link from "next/link";
 
-export const ShoppingCart: React.FC<ShoppingCartProps> = ({ 
-  items, 
-  onClose, 
-  onRemoveItem, 
-  onUpdateQuantity 
+export const ShoppingCart: React.FC<ShoppingCartProps> = ({
+  onClose,
 }) => {
+
+  const items = useAppStore((state) => state.cart);
+  const { removeFromCart, increaseQuantity, decreaseQuantity } = useAppStore()
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.08; // 8% tax
+  const tax = subtotal * 0.15; // 15% tax
   const total = subtotal + tax;
+
+  const handleRemoveFromCart = (item: CartItem) => {
+    removeFromCart(item);
+    toast.info(`${item.name} removed from cart`)
+  }
+  const handleIncreaseQuantity = (item: CartItem) => {
+    increaseQuantity(item);
+    toast.success(`${item.name} quantity increased`)
+  }
+  const handleDescreaseQuantity = (item: CartItem) => {
+    if (item.quantity <= 1) {
+      toast.error(`${item.name} quantity cannot be decreased below 1. Use remove button instead.`);
+      return;
+    }
+    decreaseQuantity(item);
+    toast.info(`${item.name} quantity increased`)
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -50,7 +70,7 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
                         className="w-16 h-16 object-cover rounded-lg"
                       />
                     )}
-                    
+
                     <div className="flex-1">
                       <h3 className="font-medium">{item.name}</h3>
                       <p className="text-blue-600 font-semibold">${item.price.toFixed(2)}</p>
@@ -60,17 +80,17 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => handleDescreaseQuantity(item)}
                       >
                         <Minus className="w-4 h-4" />
                       </Button>
-                      
+
                       <span className="w-8 text-center font-medium">{item.quantity}</span>
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => handleIncreaseQuantity(item)}
                       >
                         <Plus className="w-4 h-4" />
                       </Button>
@@ -79,7 +99,7 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onRemoveItem(item.id)}
+                      onClick={() => handleRemoveFromCart(item)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -109,9 +129,9 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
                 <span>${total.toFixed(2)}</span>
               </div>
             </div>
-            
-            <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              Proceed to Checkout
+
+            <Button className="w-full bg-gradient-to-r text-white from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Link className="w-full" href={'/checkout'}>Proceed to Checkout</Link>
             </Button>
           </div>
         )}

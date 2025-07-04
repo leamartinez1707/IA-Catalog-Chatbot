@@ -48,10 +48,7 @@ export interface HeaderProps {
 }
 
 export interface ShoppingCartProps {
-  items: CartItem[];
   onClose: () => void;
-  onRemoveItem: (id: number) => void;
-  onUpdateQuantity: (id: number, quantity: number) => void;
 }
 
 export interface ChatAssistantProps {

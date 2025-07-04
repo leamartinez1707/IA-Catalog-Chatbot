@@ -1,9 +1,8 @@
-import { ShoppingBag, MessageCircle } from "lucide-react";
+import { ShoppingBag, MessageCircle, Star } from "lucide-react";
 import SearchBar from "@/components/headers/SearchBar";
 import { Button } from "@/components/ui/button";
 import { HeaderProps } from "@/types";
 import Link from "next/link";
-
 
 const Header = ({ setSearchQuery, cartItemCount, setShowChat, showChat, setShowCart, showCart }: HeaderProps) => {
     return (
@@ -30,6 +29,13 @@ const Header = ({ setSearchQuery, cartItemCount, setShowChat, showChat, setShowC
                             <MessageCircle className="w-5 h-5 mr-2" />
                             AI Assistant
                         </Button>
+                        <Link
+                            href={'/favorites'}
+                            className="flex items-center outline-1 py-[6px] px-2 rounded-md relative hover:scale-105 transition-transform"
+                        >
+                            <Star className="w-5 h-5 mr-2" />
+                            Favorites
+                        </Link>
 
                         <Button
                             variant="outline"

@@ -7,16 +7,22 @@ import { Button } from '../ui/button'
 import { Product } from '@/types'
 import { Badge } from '../ui/badge'
 import Image from 'next/image'
+import useAppStore from '@/store'
+import { toast } from 'sonner'
 
 interface ProductCardProps {
     product: Product
-    favorites: number[]
-    toggleFavorite: (productId: number) => void
-    onAddToCart: (product: Product) => void
 }
 
-const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
 
+    const favorites = useAppStore((state) => state.favorites)
+    const { handleFavorite, addToCart } = useAppStore()
+
+    const handleAddToCart = (product: Product) => {
+        addToCart(product)
+        toast.success('Product added to cart!')
+    }
     return (
         <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">
@@ -34,10 +40,10 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                     variant="ghost"
                     size="sm"
                     className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white"
-                    onClick={() => toggleFavorite(product.id)}
+                    onClick={() => handleFavorite(product)}
                 >
                     <Heart
-                        className={`w-4 h-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
+                        className={`w-4 h-4 ${favorites.some((prd) => prd.id === product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
                     />
                 </Button>
             </CardHeader>
@@ -73,7 +79,7 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                         ${product.price}
                     </span>
                     <Button
-                        onClick={() => onAddToCart(product)}
+                        onClick={() => handleAddToCart(product)}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                     >
                         <ShoppingCart className="w-4 h-4 mr-2 text-white" />
