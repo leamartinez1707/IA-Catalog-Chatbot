@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useAppStore } from "@/store";
 import { useProducts } from "@/hooks/products/useProducts";
 import { toast } from "sonner";
-// import type { ChatAssistantProps, Message, Product } from "@/types";
+import { useRouter } from "next/navigation";
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -74,12 +74,17 @@ export const ChatAssistant = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  if (!showChat) return null;
-
   const handleAddToCart = (product: Product) => {
     addToCart(product);
     toast.success(`${product.name} has been added to your cart!`)
   }
+
+  const router = useRouter();
+  const handleNavigation = (productId: number) => {
+    setShowChat(false);
+    router.push(`/product/${productId}`);
+  }
+  if (!showChat) return null;
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white shadow-lg shadow-black">
@@ -122,7 +127,7 @@ export const ChatAssistant = () => {
                   >
                     <p className="text-sm">{message.content}</p>
                   </div>
-                  {message?.product && (
+                  {message.product && (
                     <Card key={message.product.id} className="p-3 border border-gray-200">
                       <div className="flex items-center space-x-3">
                         <Image
@@ -133,7 +138,16 @@ export const ChatAssistant = () => {
                           className="w-12 h-12 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <h4 className="font-medium text-sm">{message.product.name}</h4>
+                          <button
+                            onClick={() => {
+                              if (message.product?.id !== undefined) {
+                                handleNavigation(message.product.id);
+                              }
+                            }}
+                            className="hover:underline"
+                          >
+                            <h4 className="font-medium text-sm">{message.product.name}</h4>
+                          </button>
                           <p className="text-blue-600 font-semibold">${message.product.price}</p>
                         </div>
                         <Button

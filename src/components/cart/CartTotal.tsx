@@ -1,26 +1,45 @@
-import React from 'react'
+'use client';
+
+import { useAppStore } from "@/store";
+import { cartTotals } from "@/utils/cartUtils";
 
 const CartTotal = () => {
+
+    const cart = useAppStore((state) => state.cart)
+    const { total, subTotal, tax } = cartTotals(cart);
+
     return (
-        <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-            <div className="mb-2 flex justify-between">
-                <p className="text-gray-700">Subtotal</p>
-                <p className="text-gray-700">$129.99</p>
-            </div>
-            <div className="flex justify-between">
-                <p className="text-gray-700">Shipping</p>
-                <p className="text-gray-700">$4.99</p>
-            </div>
-            <hr className="my-4" />
-            <div className="flex justify-between">
-                <p className="text-lg font-bold">Total</p>
-                <div className="">
-                    <p className="mb-1 text-lg font-bold">$134.98 USD</p>
-                    <p className="text-sm text-gray-700">including VAT</p>
+        <>
+            <div className="mb-6 pb-6 border-b border-gray-200 text-gray-800">
+                <div className="w-full flex mb-3 items-center">
+                    <div className="flex-grow">
+                        <span className="text-gray-600">Subtotal</span>
+                    </div>
+                    <div className="pl-3">
+                        <span className="font-semibold">{subTotal}</span>
+                    </div>
+                </div>
+                <div className="w-full flex items-center">
+                    <div className="flex-grow">
+                        <span className="text-gray-600">Taxes</span>
+                    </div>
+                    <div className="pl-3">
+                        <span className="font-semibold">{tax}</span>
+                    </div>
                 </div>
             </div>
-            <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
-        </div>
+            <div className="mb-6 pb-6 border-b border-gray-200 md:border-none text-gray-800 text-xl">
+                <div className="w-full flex items-center">
+                    <div className="flex-grow">
+                        <span className="text-gray-600">Total</span>
+                    </div>
+                    <div className="pl-3">
+                        <span className="font-semibold text-gray-400 text-sm">USD</span> <span className="font-semibold">{total}</span>
+                    </div>
+                </div>
+            </div>
+        </>
+
     )
 }
 

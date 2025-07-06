@@ -2,27 +2,19 @@
 
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import { Heart, Star, ShoppingCart } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Star } from 'lucide-react'
 import { Product } from '@/types'
 import { Badge } from '../ui/badge'
 import Image from 'next/image'
-import { toast } from 'sonner'
-import { useAppStore } from '@/store'
+import AddToCartButton from '../cart/AddToCartButton'
+import FavoriteButton from '../favorites/FavoriteButton'
+import Link from 'next/link'
 
 interface ProductCardProps {
     product: Product
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-
-    const favorites = useAppStore((state) => state.favorites)
-    const { handleFavorite, addToCart } = useAppStore()
-
-    const handleAddToCart = (product: Product) => {
-        addToCart(product)
-        toast.success('Product added to cart!')
-    }
     return (
         <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">
@@ -32,20 +24,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
                         alt={product.name}
                         width={300}
                         height={300}
+                        quality={100}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-
                     />
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white"
-                    onClick={() => handleFavorite(product)}
-                >
-                    <Heart
-                        className={`w-4 h-4 ${favorites.some((prd) => prd.id === product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
-                    />
-                </Button>
+                <FavoriteButton product={product} />
             </CardHeader>
 
             <CardContent className="p-4">
@@ -59,8 +42,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
                             <span className="text-sm text-gray-600">{product.rating}</span>
                         </div>
                     </div>
-
-                    <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+                    <Link href={`/product/${product.id}`} className="hover:underline">
+                        <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+                    </Link>
                     <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
 
                     <div className="flex flex-wrap gap-1">
@@ -78,13 +62,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     <span className="text-2xl font-bold text-blue-600">
                         ${product.price}
                     </span>
-                    <Button
-                        onClick={() => handleAddToCart(product)}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                    >
-                        <ShoppingCart className="w-4 h-4 mr-2 text-white" />
-                        Add to Cart
-                    </Button>
+                    <AddToCartButton product={product} />
                 </div>
             </CardFooter>
         </Card>
