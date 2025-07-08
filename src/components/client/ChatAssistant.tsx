@@ -5,9 +5,12 @@ import { X, Send, Bot, User, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ChatAssistantProps, Product } from "@/types";
+import { Product } from "@/types";
 import Image from "next/image";
-// import type { ChatAssistantProps, Message, Product } from "@/types";
+import { useAppStore } from "@/store";
+import { useProducts } from "@/hooks/products/useProducts";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -15,12 +18,19 @@ interface ChatMessage {
   product: Product | null;
 }
 
-export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantProps) => {
+export const ChatAssistant = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?', product: null }
   ])
   const [inputValue, setInputValue] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
+
+  const addToCart = useAppStore((state) => state.addToCart);
+  const showChat = useAppStore((state) => state.showChat);
+  const setShowChat = useAppStore((state) => state.setShowChat);
+
+  const { products } = useProducts();
+
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
@@ -64,6 +74,17 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+    toast.success(`${product.name} has been added to your cart!`)
+  }
+
+  const router = useRouter();
+  const handleNavigation = (productId: number) => {
+    setShowChat(false);
+    router.push(`/product/${productId}`);
+  }
+  if (!showChat) return null;
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white shadow-lg shadow-black">
@@ -78,7 +99,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
               <p className="text-sm text-blue-100">Online and ready to help</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/10">
+          <Button variant="ghost" size="sm" onClick={() => setShowChat(false)} className="text-white hover:bg-white/10">
             <X className="w-5 h-5" />
           </Button>
         </div>
@@ -106,7 +127,7 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
                   >
                     <p className="text-sm">{message.content}</p>
                   </div>
-                  {message?.product && (
+                  {message.product && (
                     <Card key={message.product.id} className="p-3 border border-gray-200">
                       <div className="flex items-center space-x-3">
                         <Image
@@ -117,12 +138,21 @@ export const ChatAssistant = ({ products, onClose, onAddToCart }: ChatAssistantP
                           className="w-12 h-12 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <h4 className="font-medium text-sm">{message.product.name}</h4>
+                          <button
+                            onClick={() => {
+                              if (message.product?.id !== undefined) {
+                                handleNavigation(message.product.id);
+                              }
+                            }}
+                            className="hover:underline"
+                          >
+                            <h4 className="font-medium text-sm">{message.product.name}</h4>
+                          </button>
                           <p className="text-blue-600 font-semibold">${message.product.price}</p>
                         </div>
                         <Button
                           size={'sm'}
-                          onClick={() => onAddToCart(message.product!)}
+                          onClick={() => handleAddToCart(message.product!)}
                           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         >
                           <ShoppingCart className="w-4 h-4 mr-2 text-white" />

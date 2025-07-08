@@ -2,21 +2,19 @@
 
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
-import { Heart, Star, ShoppingCart } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Star } from 'lucide-react'
 import { Product } from '@/types'
 import { Badge } from '../ui/badge'
 import Image from 'next/image'
+import AddToCartButton from '../cart/AddToCartButton'
+import FavoriteButton from '../favorites/FavoriteButton'
+import Link from 'next/link'
 
 interface ProductCardProps {
     product: Product
-    favorites: number[]
-    toggleFavorite: (productId: number) => void
-    onAddToCart: (product: Product) => void
 }
 
-const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: ProductCardProps) => {
-
+const ProductCard = ({ product }: ProductCardProps) => {
     return (
         <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none bg-transparent py-0">
             <CardHeader className="p-0 relative">
@@ -26,26 +24,17 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                         alt={product.name}
                         width={300}
                         height={300}
+                        quality={100}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-
                     />
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white"
-                    onClick={() => toggleFavorite(product.id)}
-                >
-                    <Heart
-                        className={`w-4 h-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
-                    />
-                </Button>
+                <FavoriteButton product={product} />
             </CardHeader>
 
             <CardContent className="p-4">
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-xs capitalize">
                             {product.category}
                         </Badge>
                         <div className="flex items-center space-x-1">
@@ -53,8 +42,9 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                             <span className="text-sm text-gray-600">{product.rating}</span>
                         </div>
                     </div>
-
-                    <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+                    <Link href={`/product/${product.id}`} className="hover:underline">
+                        <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+                    </Link>
                     <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
 
                     <div className="flex flex-wrap gap-1">
@@ -72,13 +62,7 @@ const ProductCard = ({ product, favorites, toggleFavorite, onAddToCart }: Produc
                     <span className="text-2xl font-bold text-blue-600">
                         ${product.price}
                     </span>
-                    <Button
-                        onClick={() => onAddToCart(product)}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                    >
-                        <ShoppingCart className="w-4 h-4 mr-2 text-white" />
-                        Add to Cart
-                    </Button>
+                    <AddToCartButton product={product} />
                 </div>
             </CardFooter>
         </Card>

@@ -1,5 +1,8 @@
-import { Product } from "@/types"
+import type { Product } from "@/types"
 import Image from "next/image"
+import AddToCartButton from "../cart/AddToCartButton"
+import FavoriteButton from "./FavoriteButton"
+import ButtonToProductDetail from "../products/ButtonToProductDetail"
 
 interface Props {
     product: Product
@@ -7,27 +10,32 @@ interface Props {
 
 const FavoritesItem = ({ product }: Props) => {
     return (
-        <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-            <Image src={product.image ?? ''} alt="product-image" className="w-full rounded-lg sm:w-40" />
-            <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                <div className="mt-5 sm:mt-0">
-                    <h2 className="text-lg font-bold text-gray-900">{product.name}</h2>
-                    <p className="mt-1 text-xs text-gray-700">36EU - 4US</p>
-                </div>
-                <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                    <div className="flex items-center border-gray-100">
-                        <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                        <input className="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                        <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
+        <div>
+            <div className="flex flex-col sm:flex-row gap-2 justify-between mb-6 rounded-lg bg-white p-6 shadow-md">
+                <Image src={product.image ?? ''} alt="product-image"
+                    width={200} height={200}
+                    className="rounded-lg sm:h-fit max-h-[200px] max-w-[200px] sm:w-full" />
+                <div className="space-y-4 sm:space-y-2 w-full sm:mt-0 flex flex-col sm:ml-4 ">
+                    <div className="flex items-center justify-end space-x-4">
+                        <p className="text-sm">${product.price}</p>
+                        <div className="absolute">
+                            <FavoriteButton product={product} />
+                        </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                        <p className="text-sm">259.000 ₭</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                    <div className="flex flex-col justify-evenly w-full h-full gap-y-4">
+                        <div>
+                            <ButtonToProductDetail productId={product.id}>
+                                <h2 className="text-xl font-bold text-gray-900">{product.name}</h2>
+                            </ButtonToProductDetail>
+                            <p className="mt-1 text-gray-700">{product.description}</p>
+                            <p className="mt-1 text-xs text-gray-700">{product.features}</p>
+                        </div>
+                        <AddToCartButton
+                            product={product} />
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }

@@ -1,7 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 html button {
     @apply hover:cursor-pointer;
+}
+
+.bg-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600
 }

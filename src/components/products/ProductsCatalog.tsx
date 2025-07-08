@@ -1,8 +1,27 @@
+'use client';
 import { Badge } from "@/components/ui/badge";
-import type { ProductCatalogProps } from "@/types";
 import ProductCard from "@/components/products/ProductCard";
+import { useAppStore } from "@/store";
+import { useProducts } from "@/hooks/products/useProducts";
 
-export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts: data, searchQuery, onAddToCart, selectedCategory, setSelectedCategory, favorites, setFavorites }) => {
+export const ProductCatalog = () => {
+  const { products: data, isLoading, error } = useProducts();
+  const { searchQuery, selectedCategory, setSelectedCategory } = useAppStore()
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg">Loading products...</p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-500 text-lg">Error loading products: {error.message}</p>
+      </div>
+    );
+  }
 
   const categories = ["All", ...new Set(data?.map(p => p.category))];
 
@@ -16,14 +35,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts:
 
     return matchesSearch && matchesCategory
   });
-
-  const toggleFavorite = (productId: number) => {
-    setFavorites(prev =>
-      prev.includes(productId)
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
-  };
 
   return (
     <div className="space-y-6">
@@ -46,9 +57,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({ initialProducts:
           <ProductCard
             product={product}
             key={product.id}
-            toggleFavorite={toggleFavorite}
-            onAddToCart={onAddToCart}
-            favorites={favorites}
           />
         ))}
       </div>

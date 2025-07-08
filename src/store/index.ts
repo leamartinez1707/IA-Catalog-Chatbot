@@ -1,26 +1,21 @@
-import { Product } from '@/types';
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import useCartSlice, { CartStore } from './slices/useCartSlice'
+import useFavoriteSlice, { FavStore } from './slices/useFavoritesSlice'
+import useGeneralSlice, { GeneralStore } from './slices/useGeneralSlice'
 
-interface BearState {
-    favorites: Product[]
-}
-
-const useBearStore = create<BearState>()((set) => ({
-    favorites: [],
-
-
-    addToFavorites: (product: Product) => {
-        set((state) => ({
-            favorites: [...state.favorites, product]
-        }))
-    },
-    removeFavorite: (id: number) => {
-        set((state) => ({
-            favorites: state.favorites.filter((fav) => fav.id === id)
-        }))
-    }
-
-
-}))
-
-export default useBearStore;
+export const useAppStore = create<FavStore & CartStore & GeneralStore>()(
+    persist(
+        (...a) => ({
+            ...useFavoriteSlice(...a),
+            ...useCartSlice(...a),
+            ...useGeneralSlice(...a),
+        })
+        , {
+            name: 'shop-smart-storage',
+            partialize: (state) => ({
+                favorites: state.favorites,
+                cart: state.cart,
+            }),
+        })
+)

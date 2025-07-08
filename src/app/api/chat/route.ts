@@ -4,7 +4,7 @@ import type { ChatCompletionMessageParam } from 'openai/resources/chat/completio
 import { Product } from '@/types'
 
 const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
 })
 
 export const POST = async (req: NextRequest) => {
@@ -21,6 +21,7 @@ export const POST = async (req: NextRequest) => {
         role: 'system',
         content: `Sos un asistente de compras. Estos son los productos disponibles:\n${productContext}\nUsá esta información para recomendar productos o responder consultas.
         Siempre que recomiendes un producto, asegurate de mencionarlo por su nombre real en el idioma original, no lo traduzcas ni lo modifiques. Si el cliente te pide que le recomiendes otro producto, asegurate de que sea uno de los productos disponibles en la lista y no repitas el mismo producto que ya le recomendaste. Solo recomendale de a un producto por vez, no le digas "te recomiendo estos productos" o "te recomiendo este y este otro", solo uno a la vez. Si no hay productos disponibles, decile que no hay productos disponibles en este momento.
+        Si el cliente te hace una pregunta que no está relacionada con los productos, respondé de manera amigable y educada, pero sin ofrecer recomendaciones de productos. Por ejemplo, si te pregunta "¿Cuál es el clima hoy?", podés responder "Lo siento, no tengo información sobre el clima. ¿En qué puedo ayudarte con nuestros productos?".
         `,
     }
     const lastMessages: ChatCompletionMessageParam[] = messages.slice(-5).map(m => ({
