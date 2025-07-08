@@ -7,7 +7,7 @@ import PageTitle from '../titles/PageTitle'
 const FavoritesList = () => {
     const favorites = useAppStore((state) => state.favorites)
     return (
-        <div className="h-auto bg-gray-100 pt-8">
+        <div className="mih-h-screen h-auto bg-gray-100 py-8">
             <PageTitle>
                 Favorites
             </PageTitle>
