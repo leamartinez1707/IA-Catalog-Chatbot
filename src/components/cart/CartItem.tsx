@@ -6,8 +6,7 @@ import { formatCurrency } from "@/utils"
 import { useAppStore } from "@/store"
 import { toast } from "sonner"
 import { Minus, Plus, Trash2 } from "lucide-react"
-import Link from "next/link"
-
+import ButtonToProductDetail from "../products/ButtonToProductDetail"
 
 interface Props {
     item: CartItem
@@ -15,7 +14,6 @@ interface Props {
 const CartProduct = ({ item }: Props) => {
 
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useAppStore()
-
     const handleRemoveFromCart = (item: CartItem) => {
         removeFromCart(item);
         toast.info(`${item.name} removed from cart`)
@@ -46,9 +44,9 @@ const CartProduct = ({ item }: Props) => {
                 )}
 
                 <div className="flex-1">
-                    <Link href={`/product/${item.id}`} className="hover:underline">
+                    <ButtonToProductDetail productId={item.id}>
                         <h3 className="font-medium uppercase">{item.name}</h3>
-                    </Link>
+                    </ButtonToProductDetail>
                     <p className="text-blue-600 font-semibold">{formatCurrency(item.price)}</p>
                 </div>
                 <div className="flex items-center space-x-2">

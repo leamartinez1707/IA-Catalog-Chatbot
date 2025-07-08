@@ -1,14 +1,13 @@
-
 "use client";
 
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { ShoppingCartProps } from "@/types";
-import Link from "next/link";
 import { useAppStore } from "@/store";
 import CartTotal from "../cart/CartTotal";
 import CartProduct from "@/components/cart/CartItem";
+import { useRouter } from "next/navigation";
 
 export const ShoppingCart: React.FC<ShoppingCartProps> = ({
   onClose,
@@ -16,6 +15,8 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   const items = useAppStore((state) => state.cart);
   const cleanCart = useAppStore((state) => state.clearCart);
+
+  const router = useRouter();
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 h-screen">
@@ -55,8 +56,13 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
         {items.length > 0 && (
           <div className="p-4 border-t space-y-4">
             <CartTotal />
-            <Button className="w-full bg-gradient-to-r text-white from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <Link className="w-full" href={'/checkout'}>Proceed to Checkout</Link>
+            <Button
+              onClick={() => {
+                onClose();
+                router.push('/checkout');
+              }}
+              className="w-full bg-gradient-to-r text-white from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              Proceed to Checkout
             </Button>
           </div>
         )}

@@ -1,16 +1,14 @@
-import { Product } from "@/types"
+import type { Product } from "@/types"
 import Image from "next/image"
 import AddToCartButton from "../cart/AddToCartButton"
 import FavoriteButton from "./FavoriteButton"
-import Link from "next/link"
+import ButtonToProductDetail from "../products/ButtonToProductDetail"
 
 interface Props {
     product: Product
 }
 
 const FavoritesItem = ({ product }: Props) => {
-
-
     return (
         <div>
             <div className="flex flex-col sm:flex-row gap-2 justify-between mb-6 rounded-lg bg-white p-6 shadow-md">
@@ -26,9 +24,9 @@ const FavoritesItem = ({ product }: Props) => {
                     </div>
                     <div className="flex flex-col justify-evenly w-full h-full gap-y-4">
                         <div>
-                            <Link href={`/product/${product.id}`} className="hover:underline">
+                            <ButtonToProductDetail productId={product.id}>
                                 <h2 className="text-xl font-bold text-gray-900">{product.name}</h2>
-                            </Link>
+                            </ButtonToProductDetail>
                             <p className="mt-1 text-gray-700">{product.description}</p>
                             <p className="mt-1 text-xs text-gray-700">{product.features}</p>
                         </div>

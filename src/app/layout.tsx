@@ -6,6 +6,7 @@ import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "sonner";
 import Header from "@/components/headers/Header";
 import ChatAssistant from "@/components/client/ChatAssistant";
+import Footer from "@/components/footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
           <Header />
           <ChatAssistant />
           {children}
+          <Footer />
           <Toaster richColors position="top-right" />
         </QueryProvider>
       </body>
