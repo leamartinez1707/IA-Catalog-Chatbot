@@ -14,6 +14,14 @@ export const metadata: Metadata = {
   title: "ShopSmart AI - AI Shopping Assistant",
   description: "Find your perfect product with the help of our AI shopping assistant",
   keywords: "shopping, AI, assistant, ecommerce, products",
+  openGraph: {
+    title: "ShopSmart AI - AI Shopping Assistant",
+    description: "Find your perfect product with the help of our AI shopping assistant",
+    url: "https://shopsmart-ai.vercel.app/",
+    siteName: "ShopSmart AI",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

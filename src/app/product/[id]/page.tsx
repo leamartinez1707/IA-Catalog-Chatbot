@@ -4,7 +4,9 @@ import PageTitle from "@/components/titles/PageTitle";
 export const metadata = {
     title: 'Product Detail',
     description: 'View product details and add to cart',
+    keywords: 'product, detail, ecommerce, shopping'
 }
+
 
 const ProductPage = () => {
     return (
