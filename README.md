@@ -1,140 +1,102 @@
+# 🛍️ ShopSmart AI - E-commerce con Asistente IA
 
-# ShopSmart AI - Next.js Shopping Assistant
+> **E-commerce completo con chatbot IA integrado**  
+> Next.js 15 + TypeScript + Tailwind CSS + OpenAI API
 
-Una aplicación de tienda online con asistente de compras AI construida con Next.js 15, TypeScript y Tailwind CSS.
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
 
-## Características
+## 🎯 Características Principales
 
-- 🤖 **Asistente AI de Compras**: Chat inteligente que ayuda a encontrar productos
-- 🛒 **Carrito de Compras**: Funcionalidad completa de carrito con gestión de cantidad
-- 🔍 **Búsqueda en Tiempo Real**: Filtrado instantáneo de productos
-- 📱 **Diseño Responsivo**: Optimizado para todos los dispositivos
-- 🎨 **UI Moderna**: Interfaces elegantes con componentes shadcn/ui
-- ⚡ **Alto Rendimiento**: Construido con Next.js App Router
-- 🔒 **TypeScript**: Completamente tipado para máxima seguridad
+- **🤖 Asistente AI**: Chatbot conversacional para recomendaciones de productos
+- **🛒 E-commerce Completo**: Catálogo, carrito, favoritos y checkout
+- **🔍 Búsqueda Inteligente**: Filtrado en tiempo real
+- **📱 Diseño Responsivo**: Mobile-first con shadcn/ui
+- **⚡ Alto Rendimiento**: Server Components y optimizaciones
 
-## Tecnologías Utilizadas
+## 🛠️ Stack Tecnológico
 
-- **Next.js 15** - Framework de React con App Router
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Framework CSS utilitario
-- **shadcn/ui** - Componentes UI elegantes
-- **Radix UI** - Componentes primitivos accesibles
-- **Lucide React** - Iconos SVG
-- **TanStack Query** - Gestión de estado del servidor
-- **Sonner** - Notificaciones toast
+**Frontend**: Next.js 15 • TypeScript • Tailwind CSS • shadcn/ui  
+**Estado**: Zustand • TanStack Query  
+**AI**: OpenAI API con streaming  
+**Herramientas**: ESLint • Prettier
 
-## Instalación
+## 🚀 Inicio Rápido
 
-1. Clona el repositorio:
 ```bash
-git clone <url-del-repositorio>
-cd ai-shopping-nextjs
-```
+# Clonar e instalar
+git clone https://github.com/tu-usuario/shopsmart-ai.git
+cd shopsmart-ai && npm install
 
-2. Instala las dependencias:
-```bash
-npm install
-# o
-yarn install
-# o
-pnpm install
-```
+# Configurar variables de entorno
+cp .env.example .env.local
+# Agregar OPENAI_API_KEY
 
-3. Ejecuta el servidor de desarrollo:
-```bash
+# Ejecutar
 npm run dev
-# o
-yarn dev
-# o
-pnpm dev
 ```
 
-4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
-
-## Scripts Disponibles
-
-- `npm run dev` - Inicia el servidor de desarrollo
-- `npm run build` - Construye la aplicación para producción
-- `npm run start` - Inicia el servidor de producción
-- `npm run lint` - Ejecuta el linter
-- `npm run type-check` - Verifica los tipos de TypeScript
-
-## Estructura del Proyecto
+## 📁 Arquitectura
 
 ```
-├── src/                   # Código fuente principal
-│   ├── app/               # App Router de Next.js
-│   │   ├── globals.css    # Estilos globales
-│   │   ├── layout.tsx     # Layout raíz
-│   │   ├── page.tsx       # Página principal
-│   │   └── api/           # API Routes
-│   │       └── chat/      # Endpoints del chat
-│   ├── components/        # Componentes reutilizables
-│   ├── lib/               # Utilidades y configuraciones
-│   │   ├── utils.ts       # Funciones utilitarias
-│   │   └── supabase/      # Configuración de Supabase
-│   │       ├── server.ts
-│   │       └── api/       # Peticiones de Supabase
-│   │           └── index.ts
-│   ├── providers/         # Providers de contexto
-│   ├── types/             # Definiciones de tipos TypeScript
-├── public/                # Archivos estáticos
-├── components.json        # Configuración de shadcn/ui
-├── eslint.config.mjs      # Configuración de ESLint
-├── next.config.ts         # Configuración de Next.js
-├── package.json           # Dependencias y scripts
-├── postcss.config.mjs     # Configuración de PostCSS
-├── tsconfig.json          # Configuración de TypeScript
-└── README.md              # Documentación del proyecto
+src/
+├── app/                    # App Router (Next.js 15)
+│   ├── api/chat/          # Endpoint del chatbot AI
+│   ├── checkout/          # Página de checkout
+│   ├── favorites/         # Página de favoritos
+│   └── product/[id]/      # Páginas dinámicas
+├── components/            # Componentes reutilizables
+│   ├── cart/             # Carrito de compras
+│   ├── checkout/         # Formularios checkout
+│   ├── client/           # Componentes cliente
+│   ├── products/         # Catálogo productos
+│   └── ui/               # Componentes shadcn/ui
+├── hooks/                # Custom hooks
+├── store/                # Estado global (Zustand)
+├── types/                # Definiciones TypeScript
+└── utils/                # Funciones utilitarias
 ```
 
-## Características Principales
+## 💡 Decisiones Técnicas
 
-### Asistente AI de Compras
-- Chat conversacional que entiende las necesidades del usuario
-- Recomendaciones de productos basadas en preferencias
-- Respuestas contextuales e inteligentes
+- **Next.js App Router**: SSR + Server Components
+- **Zustand**: Estado global simple y eficiente
+- **TanStack Query**: Cache inteligente de datos
+- **shadcn/ui**: Sistema de componentes consistente
+- **TypeScript estricto**: Máxima seguridad de tipos
 
-### Catálogo de Productos
-- Grid responsivo de productos
-- Filtrado por categorías
-- Sistema de favoritos
-- Calificaciones y reseñas
+## 🚀 Deploy
 
-### Carrito de Compras
-- Gestión completa de cantidad
-- Cálculo automático de totales e impuestos
-- Interfaz intuitiva para agregar/remover productos
-
-### Búsqueda Avanzada
-- Búsqueda en tiempo real
-- Filtrado por nombre, descripción y categoría
-- Resultados instantáneos
-
-## Despliegue
-Esta aplicación puede ser desplegada en cualquier plataforma que soporte Next.js:
-
-- **Vercel** (recomendado)
-- **Netlify**
-- **Railway**
-- **AWS**
-- **Google Cloud**
-
-Para desplegar en Vercel:
 ```bash
+# Vercel (recomendado)
 npm install -g vercel
-vercel
+vercel --prod
+
+# Variables de entorno necesarias
+OPENAI_API_KEY=tu_api_key_aqui
+SUPABASE_URL=url_supabase
+SUPABASE_ANON_KEY=supabase_key
 ```
 
-## Contribución
+## 👨‍💻 Habilidades Demostradas
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-caracteristica`)
-3. Commit tus cambios (`git commit -am 'Agrega nueva característica'`)
-4. Push a la rama (`git push origin feature/nueva-caracteristica`)
-5. Abre un Pull Request
+- ⚛️ React 18 + Next.js 15 con App Router
+- 🔷 TypeScript avanzado con interfaces personalizadas
+- 🎨 CSS moderno con Tailwind + componentes reutilizables
+- 🔄 Gestión de estado eficiente (Zustand + TanStack Query)
+- 🤖 Integración AI con streaming responses
+- 📱 Desarrollo responsive mobile-first
+- 🔧 Tooling profesional y mejores prácticas
 
-## Licencia
+## 🤝 Contacto
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+¿Interesado en mi trabajo? ¡Hablemos!
+
+- 📧 **Email**: [leandromartinez@gmail.com](mailto:leandromartinez.dev@gmail.com)
+- 💼 **LinkedIn**: [@leandromartinezuy](https://www.linkedin.com/in/leandromartinezuy/)
+- 🐙 **GitHub**: [@leamartinez1707](https://github.com/leamartinez1707)
+
+---
+
+⭐ **Si este proyecto te resulta útil, no olvides darle una estrella**
