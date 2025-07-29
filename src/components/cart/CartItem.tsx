@@ -31,41 +31,39 @@ const CartProduct = ({ item }: Props) => {
         toast.info(`${item.name} quantity increased`)
     }
     return (
-        <Card key={item.id} className="p-4">
-            <div className="flex items-center space-x-4">
+        <Card key={item.id} className="p-2 md:p-4">
+            <div className="flex items-center gap-x-2 md:gap-x-4">
                 {item.image && (
                     <Image
                         src={item.image}
                         alt={item.name}
                         width={84}
                         height={84}
-                        className="w-20 h-20 object-cover rounded-lg"
+                        className="size-14 md:size-20 object-cover rounded-lg"
                     />
                 )}
 
-                <div className="flex-1">
+                <div className="flex flex-col flex-1/2 justify-start items-start">
                     <ButtonToProductDetail productId={item.id}>
-                        <h3 className="font-medium uppercase">{item.name}</h3>
+                        <h3 className="text-sm md:text-xl text-left font-medium uppercase">{item.name}</h3>
                     </ButtonToProductDetail>
                     <p className="text-blue-600 font-semibold">{formatCurrency(item.price)}</p>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-1 items-center md:space-x-2">
                     <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => handleDescreaseQuantity(item)}
                     >
-                        <Minus className="w-4 h-4" />
+                        <Minus className="size-3 md:size-4" />
                     </Button>
 
-                    <span className="w-8 text-center font-medium">{item.quantity}</span>
+                    <span className="w-4 md:w-8 text-center font-medium">{item.quantity}</span>
 
                     <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => handleIncreaseQuantity(item)}
                     >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="size-3 md:size-4" />
                     </Button>
                 </div>
 
@@ -75,7 +73,7 @@ const CartProduct = ({ item }: Props) => {
                     onClick={() => handleRemoveFromCart(item)}
                     className="text-red-500 hover:text-red-700"
                 >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="size-2 md:size-4" />
                 </Button>
             </div>
         </Card>
