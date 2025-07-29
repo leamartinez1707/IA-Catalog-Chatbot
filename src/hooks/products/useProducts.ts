@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/supabase/api";
-import { Product } from "@/types"; // si tenés definido el tipo
+import { Product } from "@/types";
 
 export const useProducts = () => {
     const {
