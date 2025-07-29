@@ -81,7 +81,7 @@ SUPABASE_ANON_KEY=supabase_key
 
 ## 👨‍💻 Habilidades Demostradas
 
-- ⚛️ React 18 + Next.js 15 con App Router
+- ⚛️ React 19 + Next.js 15 con App Router
 - 🔷 TypeScript avanzado con interfaces personalizadas
 - 🎨 CSS moderno con Tailwind + componentes reutilizables
 - 🔄 Gestión de estado eficiente (Zustand + TanStack Query)
