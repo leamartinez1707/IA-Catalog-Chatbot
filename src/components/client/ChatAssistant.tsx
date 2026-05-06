@@ -1,209 +1,302 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { X, Send, Bot, User, ShoppingCart } from "lucide-react";
+import { Bot, RefreshCcw, Send, ShoppingCart, Sparkles, User, X } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { Product } from "@/types";
-import Image from "next/image";
-import { useAppStore } from "@/store";
 import { useProducts } from "@/hooks/products/useProducts";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useAppStore } from "@/store";
+import { Product } from "@/types";
 
 interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   product: Product | null;
 }
 
+const starterPrompts = [
+  "I need a gift under $150",
+  "Recommend something for a compact desk setup",
+  "What is a good option for daily use?",
+];
+
+const initialMessage: ChatMessage = {
+  role: "assistant",
+  content:
+    "Tell me the budget, use case, or type of shopper you have in mind and I will narrow the catalog down for you.",
+  product: null,
+};
+
 export const ChatAssistant = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: 'Hello! I am your AI shopping assistant. How can I help you today?', product: null }
-  ])
-  const [inputValue, setInputValue] = useState<string>("");
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
   const addToCart = useAppStore((state) => state.addToCart);
   const showChat = useAppStore((state) => state.showChat);
   const setShowChat = useAppStore((state) => state.setShowChat);
-
   const { products } = useProducts();
 
-
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
-
-    const newMessages = [
-      ...messages,
-      { role: 'user', content: inputValue, product: null } as const
-    ];
-
-    setMessages(newMessages)
-    setInputValue('')
-    setIsTyping(true)
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, products }),
-      })
-
-      const data = await res.json()
-      if (data.reply && data.product) {
-        setMessages([...newMessages, { role: 'assistant', content: data.reply, product: data.product }]);
-      } else {
-        setMessages([...newMessages, { role: 'assistant', content: data.reply, product: null }]);
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setIsTyping(false)
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSendMessage();
-    }
-  };
-  const chatEndRef = useRef<HTMLDivElement>(null)
+  const router = useRouter();
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const isSendingRef = useRef(false);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    if (!showChat) {
+      setInputValue("");
+    }
+  }, [showChat]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
+
+  const sendMessage = async (prompt?: string) => {
+    const content = (prompt ?? inputValue).trim();
+
+    if (!content || isTyping || isSendingRef.current) {
+      return;
+    }
+
+    isSendingRef.current = true;
+
+    const nextMessages: ChatMessage[] = [
+      ...messages,
+      { role: "user", content, product: null },
+    ];
+
+    setMessages(nextMessages);
+    setInputValue("");
+    setIsTyping(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages, products }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.reply) {
+        throw new Error(data.error || "Unable to generate a recommendation right now.");
+      }
+
+      setMessages([
+        ...nextMessages,
+        {
+          role: "assistant",
+          content: data.reply,
+          product: data.product ?? null,
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+      setMessages([
+        ...nextMessages,
+        {
+          role: "assistant",
+          content:
+            "I hit an issue while checking the catalog. Try again in a moment or ask with a budget or category for a narrower search.",
+          product: null,
+        },
+      ]);
+      toast.error("The assistant could not complete that request.");
+    } finally {
+      setIsTyping(false);
+      isSendingRef.current = false;
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
-    toast.success(`${product.name} has been added to your cart!`)
-  }
+    toast.success(`${product.name} has been added to your cart.`);
+  };
 
-  const router = useRouter();
-  const handleNavigation = (productId: number) => {
+  const handleNavigation = (productId: string) => {
     setShowChat(false);
     router.push(`/product/${productId}`);
+  };
+
+  const resetConversation = () => {
+    isSendingRef.current = false;
+    setMessages([initialMessage]);
+    setInputValue("");
+  };
+
+  if (!showChat) {
+    return null;
   }
-  if (!showChat) return null;
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl h-[600px] flex flex-col animate-scale-in bg-white shadow-lg shadow-black">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-              <Bot className="w-6 h-6" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+      <Card className="flex h-[680px] w-full max-w-3xl flex-col overflow-hidden border-slate-200 bg-white shadow-[0_30px_120px_-40px_rgba(15,23,42,0.55)] animate-scale-in">
+        <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-white/10 text-sky-200">
+                <Bot className="size-5" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-semibold">AI Catalog Concierge</h3>
+                  <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-xs text-emerald-200">
+                    Live product guidance
+                  </span>
+                </div>
+                <p className="max-w-xl text-sm leading-6 text-slate-300">
+                  Ask by budget, context, or user need. The assistant will recommend a product and link you straight into the buying flow.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold">AI Shopping Assistant</h3>
-              <p className="text-sm text-blue-100">Online and ready to help</p>
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowChat(false)}
+              className="text-white hover:bg-white/10 hover:text-white"
+            >
+              <X className="size-5" />
+            </Button>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setShowChat(false)} className="text-white hover:bg-white/10">
-            <X className="w-5 h-5" />
-          </Button>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-          {messages?.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${message.role === 'assistant' ? "justify-start" : "justify-end"} animate-fade-in`}
+        <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-2">
+            {starterPrompts.map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => sendMessage(prompt)}
+                className="rounded-full border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 transition-colors hover:border-sky-300 hover:bg-sky-50 hover:text-sky-900"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <Sparkles className="size-3.5" />
+                  {prompt}
+                </span>
+              </button>
+            ))}
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={resetConversation}
+              className="self-start text-slate-500 hover:bg-white hover:text-slate-950"
             >
-              <div className={`flex items-start space-x-2 max-w-xs lg:max-w-md`}>
-                {message.role === 'assistant' && (
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white flex-shrink-0">
-                    <Bot className="w-4 h-4" />
-                  </div>
-                )}
+              <RefreshCcw className="size-4" />
+              Reset
+            </Button>
+          </div>
+        </div>
 
-                <div className="space-y-2">
+        <div className="flex-1 space-y-4 overflow-y-auto bg-[linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] px-5 py-5">
+          {messages.map((message, index) => (
+            <div
+              key={`${message.role}-${index}-${message.content}`}
+              className={`flex ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
+            >
+              <div className="max-w-xl space-y-3">
+                <div className={`flex items-start gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
                   <div
-                    className={`px-4 py-2 rounded-lg ${message.role === 'assistant'
-                      ? "bg-gray-100 text-gray-900"
-                      : "bg-blue-500 text-white"
-                      }`}
+                    className={`flex size-9 shrink-0 items-center justify-center rounded-2xl ${
+                      message.role === "assistant"
+                        ? "bg-slate-950 text-white"
+                        : "bg-sky-600 text-white"
+                    }`}
                   >
-                    <p className="text-sm">{message.content}</p>
+                    {message.role === "assistant" ? <Bot className="size-4" /> : <User className="size-4" />}
                   </div>
-                  {message.product && (
-                    <Card key={message.product.id} className="p-3 border border-gray-200">
-                      <div className="flex items-center space-x-3">
-                        <Image
-                          src={message.product.image}
-                          alt={message.product.name}
-                          width={48}
-                          height={48}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                        <div className="flex-1">
-                          <button
-                            onClick={() => {
-                              if (message.product?.id !== undefined) {
-                                handleNavigation(message.product.id);
-                              }
-                            }}
-                            className="hover:underline"
-                          >
-                            <h4 className="font-medium text-sm">{message.product.name}</h4>
-                          </button>
-                          <p className="text-blue-600 font-semibold">${message.product.price}</p>
-                        </div>
-                        <Button
-                          size={'sm'}
-                          onClick={() => handleAddToCart(message.product!)}
-                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                        >
-                          <ShoppingCart className="w-4 h-4 mr-2 text-white" />
-                          Add to Cart
-                        </Button>
-                      </div>
-                    </Card>
-                  )}
+
+                  <div
+                    className={`rounded-3xl px-4 py-3 text-sm leading-6 shadow-sm ${
+                      message.role === "assistant"
+                        ? "bg-slate-100 text-slate-900"
+                        : "bg-sky-600 text-white"
+                    }`}
+                  >
+                    {message.content}
+                  </div>
                 </div>
 
-                {message.role === 'user' && (
-                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white flex-shrink-0">
-                    <User className="w-4 h-4" />
-                  </div>
+                {message.product && (
+                  <Card className="border-slate-200 p-3">
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src={message.product.image}
+                        alt={message.product.name}
+                        width={56}
+                        height={56}
+                        className="h-14 w-14 rounded-xl object-cover"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <button
+                          type="button"
+                          onClick={() => handleNavigation(message.product!.id)}
+                          className="text-left hover:underline"
+                        >
+                          <h4 className="truncate text-sm font-semibold text-slate-950">{message.product.name}</h4>
+                        </button>
+                        <p className="text-sm text-slate-500">Recommended from the live catalog</p>
+                        <p className="mt-1 font-semibold text-sky-700">${message.product.price}</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => handleAddToCart(message.product!)}
+                        className="bg-slate-950 text-white hover:bg-slate-800"
+                      >
+                        <ShoppingCart className="size-4" />
+                        Add to cart
+                      </Button>
+                    </div>
+                  </Card>
                 )}
               </div>
-              <div ref={chatEndRef} />
             </div>
           ))}
 
           {isTyping && (
-            <div className="flex justify-start animate-fade-in">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <div className="bg-gray-100 px-4 py-2 rounded-lg">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                  </div>
-                </div>
+            <div className="flex justify-start">
+              <div className="flex items-center gap-3 rounded-3xl bg-slate-100 px-4 py-3 text-sm text-slate-600">
+                <Bot className="size-4 text-slate-950" />
+                Looking through the catalog...
               </div>
             </div>
           )}
+          <div ref={chatEndRef} />
         </div>
 
-        {/* Input */}
-        < div className="p-4 border-t" >
-          <div className="flex space-x-2">
+        <div className="border-t border-slate-200 bg-white p-4">
+          <div className="mb-3 flex items-center justify-between text-xs text-slate-400">
+            <span>Use natural language: budget, category, use case, or gift idea.</span>
+            <span>{inputValue.length}/180</span>
+          </div>
+          <div className="flex gap-2">
             <Input
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(event) => setInputValue(event.target.value)}
               onKeyDown={handleKeyPress}
-              maxLength={150}
-              placeholder="Ask me about products, recommendations, or anything else..."
-              className="flex-1"
+              maxLength={180}
+              placeholder="Example: I need something premium for a home office under $200"
+              className="flex-1 border-slate-300"
             />
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:cursor-pointer" onClick={handleSendMessage} disabled={!inputValue.trim()}>
-              <Send className="w-4 h-4 fill-white" />
+            <Button
+              onClick={() => sendMessage()}
+              disabled={!inputValue.trim() || isTyping}
+              className="bg-slate-950 text-white hover:bg-slate-800"
+            >
+              <Send className="size-4" />
             </Button>
           </div>
         </div>

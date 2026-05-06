@@ -11,12 +11,20 @@ import Footer from "@/components/footer/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ShopSmart AI - AI Shopping Assistant",
-  description: "Find your perfect product with the help of our AI shopping assistant",
-  keywords: "shopping, AI, assistant, ecommerce, products",
+  title: "ShopSmart AI | Conversational Product Discovery",
+  description:
+    "A polished e-commerce experience focused on conversational product discovery, guided recommendations, and faster buying decisions.",
+  keywords: [
+    "Next.js ecommerce portfolio",
+    "AI shopping assistant",
+    "conversational commerce",
+    "frontend portfolio project",
+    "product discovery UX",
+  ],
   openGraph: {
-    title: "ShopSmart AI - AI Shopping Assistant",
-    description: "Find your perfect product with the help of our AI shopping assistant",
+    title: "ShopSmart AI | Conversational Product Discovery",
+    description:
+      "An e-commerce product experience that uses AI guidance to reduce choice overload and move users from discovery to checkout faster.",
     url: "https://shopsmart-ai.vercel.app/",
     siteName: "ShopSmart AI",
     locale: "en_US",

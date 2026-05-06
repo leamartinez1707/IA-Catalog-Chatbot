@@ -1,36 +1,69 @@
-import Link from 'next/link'
-const Footer = () => {
-    return (
-        <footer className="bg-gradient border-gray-200 bottom-0 z-50 min-h-52 h-fit shadow-md">
-            <div className="flex flex-col sm:flex-row justify-between items-center py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-white text-sm w-full flex flex-col items-center gap-y-4">
-                    &copy; {new Date().getFullYear()} ShopSmart AI. All rights reserved.
-                    <p className="text-white text-sm">
-                        Crafted and designed by <a
-                            className='text-gray-800 font-bold hover:underline'
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            href="https://www.linkedin.com/in/leandromartinezuy/">Leandro Martinez</a>, a Full Stack Developer from Uruguay.
-                    </p>
-                </div>
-                <div className='flex flex-col h-full w-full items-center justify-between'>
-                    <div className="flex space-x-4 mt-4 sm:mt-0">
-                        <Link href="/#" className="text-white hover:text-gray-800">Privacy Policy</Link>
-                        <Link href="/#" className="text-white hover:text-gray-800">Terms of Service</Link>
-                    </div>
-                    <p className='text-2xl text-center text-black font-bold mt-4'>
-                        Would you like to have an eCommerce with AI Powered Chatbot?
-                    </p>
-                    <a href='https://www.linkedin.com/in/leandromartinezuy/'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='bg-black hover:bg-black/80 transition-colors duration-200 p-4 rounded-md text-white'>
-                        Contact me
-                    </a>
-                </div>
-            </div>
-        </footer>
-    )
-}
+import Link from "next/link";
 
-export default Footer
+const Footer = () => {
+  return (
+    <footer className="border-t border-slate-200 bg-slate-950 text-slate-200">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-10 sm:px-6 lg:flex-row lg:justify-between lg:px-8">
+        <div className="max-w-xl space-y-4">
+          <p className="text-sm uppercase tracking-[0.24em] text-sky-300">ShopSmart AI</p>
+          <h2 className="text-2xl font-semibold text-white">
+            Smarter product discovery, powered by conversational AI.
+          </h2>
+          <p className="text-sm leading-7 text-slate-400">
+            Browse the catalog, save favorites, review your cart, and ask the assistant for tailored recommendations when you need a faster path to the right product.
+          </p>
+          <p className="text-sm text-slate-500">
+            &copy; {new Date().getFullYear()} Leandro Martinez. Designed and built in Uruguay.
+          </p>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2 lg:min-w-[420px]">
+          <div className="space-y-4">
+            <p className="text-sm font-semibold text-white">Explore</p>
+            <div className="flex flex-col gap-3 text-sm text-slate-300">
+              <Link href="/#catalog" className="transition-colors hover:text-white">
+                Browse catalog
+              </Link>
+              <Link href="/favorites" className="transition-colors hover:text-white">
+                View saved favorites
+              </Link>
+              <Link href="/checkout" className="transition-colors hover:text-white">
+                Review checkout
+              </Link>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-sm font-semibold text-white">Contact</p>
+            <div className="flex flex-col gap-3 text-sm text-slate-300">
+              <a
+                href="mailto:leandromartinez.dev@gmail.com"
+                className="transition-colors hover:text-white"
+              >
+                leandromartinez.dev@gmail.com
+              </a>
+              <a
+                href="https://www.linkedin.com/in/leandromartinezuy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-white"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://github.com/leamartinez1707"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-white"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

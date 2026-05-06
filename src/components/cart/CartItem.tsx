@@ -31,7 +31,7 @@ const CartProduct = ({ item }: Props) => {
         toast.info(`${item.name} quantity increased`)
     }
     return (
-        <Card key={item.id} className="p-4">
+        <Card key={item.id} className="rounded-[1.5rem] border border-slate-200/80 p-4 shadow-sm">
             <div className="flex items-center space-x-4">
                 {item.image && (
                     <Image
@@ -39,31 +39,34 @@ const CartProduct = ({ item }: Props) => {
                         alt={item.name}
                         width={84}
                         height={84}
-                        className="w-20 h-20 object-cover rounded-lg"
+                        className="h-20 w-20 rounded-2xl object-cover"
                     />
                 )}
 
                 <div className="flex-1">
                     <ButtonToProductDetail productId={item.id}>
-                        <h3 className="font-medium uppercase">{item.name}</h3>
+                        <h3 className="font-medium tracking-tight text-slate-950">{item.name}</h3>
                     </ButtonToProductDetail>
-                    <p className="text-blue-600 font-semibold">{formatCurrency(item.price)}</p>
+                    <p className="mt-1 text-sm text-slate-500">Qty {item.quantity}</p>
+                    <p className="mt-1 font-semibold text-slate-950">{formatCurrency(item.price)}</p>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 rounded-full border border-slate-200 bg-slate-50 px-2 py-1">
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDescreaseQuantity(item)}
+                        className="h-8 w-8 rounded-full border-slate-200 p-0"
                     >
                         <Minus className="w-4 h-4" />
                     </Button>
 
-                    <span className="w-8 text-center font-medium">{item.quantity}</span>
+                    <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
 
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleIncreaseQuantity(item)}
+                        className="h-8 w-8 rounded-full border-slate-200 p-0"
                     >
                         <Plus className="w-4 h-4" />
                     </Button>
@@ -73,7 +76,7 @@ const CartProduct = ({ item }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleRemoveFromCart(item)}
-                    className="text-red-500 hover:text-red-700"
+                    className="rounded-full text-red-500 hover:bg-rose-50 hover:text-red-700"
                 >
                     <Trash2 className="w-4 h-4" />
                 </Button>

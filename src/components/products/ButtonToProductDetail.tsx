@@ -1,7 +1,7 @@
 import { useNavigateToProduct } from "@/hooks/products/useNavigateToProduct"
 
 interface Props {
-    productId: number
+    productId: string
     children?: React.ReactNode
 }
 const ButtonToProductDetail = ({ productId, children }: Props) => {

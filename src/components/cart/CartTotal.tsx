@@ -10,10 +10,10 @@ const CartTotal = () => {
 
     return (
         <>
-            <div className="mb-6 pb-6 border-b border-gray-200 text-gray-800">
+            <div className="mb-5 border-b border-slate-200 pb-5 text-slate-800">
                 <div className="w-full flex mb-3 items-center">
                     <div className="flex-grow">
-                        <span className="text-gray-600">Subtotal</span>
+                        <span className="text-slate-500">Subtotal</span>
                     </div>
                     <div className="pl-3">
                         <span className="font-semibold">{subTotal}</span>
@@ -21,20 +21,20 @@ const CartTotal = () => {
                 </div>
                 <div className="w-full flex items-center">
                     <div className="flex-grow">
-                        <span className="text-gray-600">Taxes</span>
+                        <span className="text-slate-500">Taxes</span>
                     </div>
                     <div className="pl-3">
                         <span className="font-semibold">{tax}</span>
                     </div>
                 </div>
             </div>
-            <div className="mb-6 pb-6 border-b border-gray-200 md:border-none text-gray-800 text-xl">
+            <div className="text-xl text-slate-800 md:border-none">
                 <div className="w-full flex items-center">
                     <div className="flex-grow">
-                        <span className="text-gray-600">Total</span>
+                        <span className="text-slate-500">Total</span>
                     </div>
                     <div className="pl-3">
-                        <span className="font-semibold text-gray-400 text-sm">USD</span> <span className="font-semibold">{total}</span>
+                        <span className="text-sm font-semibold text-slate-400">USD</span> <span className="font-semibold">{total}</span>
                     </div>
                 </div>
             </div>

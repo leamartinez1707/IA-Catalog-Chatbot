@@ -17,16 +17,16 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
         <Input
           type="text"
-          placeholder="Search for products..."
+          placeholder="Search for products, categories or use cases..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             onSearch(e.target.value);
           }}
-          className="pl-10 pr-4 py-2 w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="h-12 rounded-full border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition-colors placeholder:text-slate-400 focus-visible:border-blue-400 focus-visible:ring-blue-400/30"
         />
       </div>
     </form>

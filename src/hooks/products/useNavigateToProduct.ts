@@ -6,7 +6,7 @@ export const useNavigateToProduct = () => {
     const router = useRouter();
     const setShowCart = useAppStore((state) => state.setShowCart);
 
-    const handleNavigateToProduct = (productId: number) => {
+    const handleNavigateToProduct = (productId: string) => {
         setShowCart(false);
         router.push(`/product/${productId}`);
     };

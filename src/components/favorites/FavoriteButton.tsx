@@ -19,11 +19,11 @@ const FavoriteButton = ({ product }: { product: Product }) => {
     return (
         <Button
             size="sm"
-            className="absolute top-2 right-2 bg-white hover:bg-gray-200 rounded-full p-1 shadow-md transition-colors duration-200"
+            className="absolute right-3 top-3 h-9 w-9 rounded-full border border-white/30 bg-white/90 p-0 shadow-lg backdrop-blur transition-colors duration-200 hover:bg-slate-100"
             onClick={() => handleFavorite(product)}
         >
             <Heart
-                className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-600 hover:fill-white duration-200 transition-colors hover:text-white' : 'text-red-600 fill-white'}`}
+                className={`h-4 w-4 ${isFavorite ? 'fill-rose-500 text-rose-600' : 'fill-transparent text-slate-700'}`}
             />
         </Button>
     )
