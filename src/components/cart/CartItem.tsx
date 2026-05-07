@@ -43,7 +43,7 @@ const CartProduct = ({ item }: Props) => {
                     />
                 )}
 
-                <div className="flex-1">
+                <div className="flex flex-col flex-1/2 justify-start items-start">
                     <ButtonToProductDetail productId={item.id}>
                         <h3 className="font-medium tracking-tight text-slate-950">{item.name}</h3>
                     </ButtonToProductDetail>
@@ -52,23 +52,21 @@ const CartProduct = ({ item }: Props) => {
                 </div>
                 <div className="flex items-center space-x-2 rounded-full border border-slate-200 bg-slate-50 px-2 py-1">
                     <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => handleDescreaseQuantity(item)}
                         className="h-8 w-8 rounded-full border-slate-200 p-0"
                     >
-                        <Minus className="w-4 h-4" />
+                        <Minus className="size-3 md:size-4" />
                     </Button>
 
                     <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
 
                     <Button
-                        variant="outline"
                         size="sm"
                         onClick={() => handleIncreaseQuantity(item)}
                         className="h-8 w-8 rounded-full border-slate-200 p-0"
                     >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="size-3 md:size-4" />
                     </Button>
                 </div>
 
@@ -78,7 +76,7 @@ const CartProduct = ({ item }: Props) => {
                     onClick={() => handleRemoveFromCart(item)}
                     className="rounded-full text-red-500 hover:bg-rose-50 hover:text-red-700"
                 >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="size-2 md:size-4" />
                 </Button>
             </div>
         </Card>
