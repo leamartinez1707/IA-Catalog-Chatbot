@@ -1,24 +1,36 @@
+import type { Metadata } from "next";
 import ProductDetail from "@/components/products/ProductDetail";
-import PageTitle from "@/components/titles/PageTitle";
+import { getCatalog } from "@/lib/supabase/api/server";
+import type { Product } from "@/types";
 
-export const metadata = {
-    title: 'Product Detail',
-    description: 'View product details and add to cart',
-    keywords: 'product, detail, ecommerce, shopping'
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    const { id } = await params;
+    const products = await getCatalog().catch((): Product[] => []);
+    const product = products.find((p) => p.id === id);
+    return {
+        title: product ? `${product.name} | ShopSmart AI` : "Product | ShopSmart AI",
+        description:
+            product?.description ??
+            "View product details, compare highlights, and move directly into the buying flow.",
+        keywords: product
+            ? `${product.name}, ${product.category}, ecommerce, ShopSmart AI`
+            : "product detail, ecommerce, ShopSmart AI",
+    };
 }
 
-
-const ProductPage = () => {
+const ProductPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
+    const products = await getCatalog().catch((): Product[] => []);
+    const product = products.find((p) => p.id === id) ?? null;
     return (
-        <div className="min-h-screen mt-10">
-            <PageTitle>
-                Product Detail
-            </PageTitle>
-            <div className="items-center p-5 lg:p-10 overflow-hidden relative w-full mx-auto">
-                <ProductDetail />
-            </div>
+        <div className="min-h-screen">
+            <ProductDetail product={product} products={products} />
         </div>
-    )
-}
+    );
+};
 
-export default ProductPage
+export default ProductPage;

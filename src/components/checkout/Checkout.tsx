@@ -3,7 +3,7 @@
 import PageTitle from "@/components/titles/PageTitle";
 import Image from "next/image"
 import CartTotal from "../cart/CartTotal";
-import { LandmarkIcon } from "lucide-react";
+import { ArrowLeft, CreditCard, LandmarkIcon, ShieldCheck } from "lucide-react";
 import { useAppStore } from "@/store";
 import Link from "next/link";
 import CheckoutItem from "./CheckoutItem";
@@ -25,7 +25,7 @@ const Checkout = () => {
         nameOnCard: '',
         cardNumber: '',
         expiryMonth: '01',
-        expiryYear: '2024',
+        expiryYear: '2026',
         securityCode: '',
         paymentMethod: 'credit'
     });
@@ -53,7 +53,7 @@ const Checkout = () => {
                 nameOnCard: '',
                 cardNumber: '',
                 expiryMonth: '01',
-                expiryYear: '2024',
+                expiryYear: '2026',
                 securityCode: '',
                 paymentMethod: 'credit'
             });
@@ -69,33 +69,51 @@ const Checkout = () => {
         return <EmptyCheckout />
     }
     return (
-        <div className="w-full max-w-full min-h-screen bg-gray-50 py-5">
-            <div className="px-5">
-                <div className="mb-2">
-                    <Link href="/" className="focus:outline-none hover:underline text-gray-500 text-lg"><i className="mdi mdi-arrow-left text-gray-400"></i>Back</Link>
-                </div>
-                <div className="mb-2">
-                    <PageTitle>Checkout</PageTitle>
+        <div className="min-h-screen w-full bg-slate-50 py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mb-8 space-y-4 rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.25)] sm:p-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-950">
+                        <ArrowLeft className="h-4 w-4" />
+                        Back to shop
+                    </Link>
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                        <div>
+                            <PageTitle>Checkout</PageTitle>
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">Review your items, confirm billing details and complete the demo checkout flow.</p>
+                        </div>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
+                            <ShieldCheck className="h-4 w-4" />
+                            Demo-safe checkout experience
+                        </div>
+                    </div>
                 </div>
             </div>
-            <form onSubmit={handleSubmit} className="w-full bg-white border-t border-b border-gray-200 px-5 py-10 text-gray-800">
-                <div className="w-full">
-                    <div className="md:flex items-start">
-                        <div className="px-3 md:w-7/12 lg:pr-12">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-7xl px-4 text-slate-800 sm:px-6 lg:px-8">
+                <div className="grid gap-8 lg:grid-cols-[1fr_420px] lg:items-start">
+                    <div className="rounded-[2rem] border border-slate-200/80 bg-white p-5 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.25)] sm:p-6">
+                        <div className="mb-5 flex items-center justify-between">
+                            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Order summary</h2>
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600">{cart.length} items</span>
+                        </div>
+                        <div>
                             {cart.map((item) => (
                                 <CheckoutItem key={item.id} product={item} />
                             ))}
                             <CartTotal />
                         </div>
-                        <div className="px-3 md:w-5/12">
-                            <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 p-3 text-gray-800 font-light mb-6">
-                                <div className="w-full flex mb-3 items-center">
-                                    <div className="w-32">
-                                        <span className="text-gray-600 font-semibold">Contact</span>
-                                    </div>
-                                    <div className="flex-grow pl-3">
+                    </div>
+                    <div className="space-y-6">
+                        <div className="rounded-[2rem] border border-slate-200/80 bg-white p-5 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.25)] sm:p-6">
+                            <div className="mb-5 flex items-center gap-2">
+                                <CreditCard className="h-5 w-5 text-slate-400" />
+                                <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Billing and payment</h2>
+                            </div>
+                            <div className="mb-6 w-full rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 text-slate-800 font-light">
+                                <div className="mb-4 w-full">
+                                    <label className="mb-2 block text-sm font-semibold text-slate-600">Contact</label>
+                                    <div>
                                         <input
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                             placeholder="youremail@example.com"
                                             type="email"
                                             name="email"
@@ -105,13 +123,11 @@ const Checkout = () => {
                                         />
                                     </div>
                                 </div>
-                                <div className="w-full flex items-center">
-                                    <div className="w-32">
-                                        <span className="text-gray-600 font-semibold">Billing Address</span>
-                                    </div>
-                                    <div className="flex-grow pl-3">
+                                <div className="w-full">
+                                    <label className="mb-2 block text-sm font-semibold text-slate-600">Billing address</label>
+                                    <div>
                                         <input
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                             placeholder="Your billing address"
                                             type="text"
                                             name="billingAddress"
@@ -122,8 +138,8 @@ const Checkout = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
-                                <div className="w-full p-3 border-b border-gray-200">
+                            <div className="w-full mx-auto rounded-[1.5rem] border border-slate-200 text-slate-800 font-light">
+                                <div className="w-full border-b border-slate-200 p-4">
                                     <div className="mb-5 flex w-full items-center">
                                         <label htmlFor="type1" className="flex items-center cursor-pointer">
                                             <input
@@ -142,15 +158,15 @@ const Checkout = () => {
                                             src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" className="ml-3"
                                             alt="Credit Cards"
                                         />
-                                        <span className="ml-3 text-gray-600 font-semibold">Credit Card</span>
+                                        <span className="ml-3 font-semibold text-slate-600">Credit Card</span>
                                     </div>
                                     {formData.paymentMethod === 'credit' && (
                                         <div>
                                             <div className="mb-3">
-                                                <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Name on card</label>
+                                                <label className="mb-2 ml-1 block text-sm font-semibold text-slate-600">Name on card</label>
                                                 <div>
                                                     <input
-                                                        className="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                        className="mb-1 w-full rounded-xl border border-slate-200 px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                                         placeholder="John Smith"
                                                         type="text"
                                                         name="nameOnCard"
@@ -161,10 +177,10 @@ const Checkout = () => {
                                                 </div>
                                             </div>
                                             <div className="mb-3">
-                                                <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Card number</label>
+                                                <label className="mb-2 ml-1 block text-sm font-semibold text-slate-600">Card number</label>
                                                 <div>
                                                     <input
-                                                        className="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                        className="mb-1 w-full rounded-xl border border-slate-200 px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                                         placeholder="0000 0000 0000 0000"
                                                         type="text"
                                                         name="cardNumber"
@@ -176,10 +192,10 @@ const Checkout = () => {
                                             </div>
                                             <div className="mb-3 -mx-2 flex items-end">
                                                 <div className="px-2 w-1/4">
-                                                    <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Expiration date</label>
+                                                    <label className="mb-2 ml-1 block text-sm font-semibold text-slate-600">Expiration date</label>
                                                     <div>
                                                         <select
-                                                            className="form-select w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+                                                            className="form-select mb-1 w-full cursor-pointer rounded-xl border border-slate-200 px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                                             name="expiryMonth"
                                                             value={formData.expiryMonth}
                                                             onChange={handleInputChange}
@@ -202,14 +218,12 @@ const Checkout = () => {
                                                 </div>
                                                 <div className="px-2 w-1/4">
                                                     <select
-                                                        className="form-select w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+                                                        className="form-select mb-1 w-full cursor-pointer rounded-xl border border-slate-200 px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                                         name="expiryYear"
                                                         value={formData.expiryYear}
                                                         onChange={handleInputChange}
                                                         required
                                                     >
-                                                        <option value="2024">2024</option>
-                                                        <option value="2025">2025</option>
                                                         <option value="2026">2026</option>
                                                         <option value="2027">2027</option>
                                                         <option value="2028">2028</option>
@@ -221,10 +235,10 @@ const Checkout = () => {
                                                     </select>
                                                 </div>
                                                 <div className="px-2 w-1/4">
-                                                    <label className="text-gray-600 font-semibold text-sm mb-2 ml-1">Security code</label>
+                                                    <label className="mb-2 ml-1 block text-sm font-semibold text-slate-600">Security code</label>
                                                     <div>
                                                         <input
-                                                            className="w-full px-3 py-2 mb-1 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors"
+                                                            className="mb-1 w-full rounded-xl border border-slate-200 px-3 py-3 outline-none transition-colors focus:border-blue-400"
                                                             placeholder="000"
                                                             type="text"
                                                             name="securityCode"
@@ -239,7 +253,7 @@ const Checkout = () => {
                                         </div>
                                     )}
                                 </div>
-                                <div className="w-full flex p-3 items-center">
+                                <div className="flex w-full items-center p-4">
                                     <label htmlFor="type2" className="flex items-center cursor-pointer">
                                         <input
                                             type="radio"
@@ -251,33 +265,32 @@ const Checkout = () => {
                                             onChange={handleInputChange}
                                         />
                                     </label>
-                                    <LandmarkIcon className="w-5 h-5 text-gray-400 ml-3" />
-                                    <span className="mx-3 text-gray-600 font-semibold">Bank transfer</span>
-                                    <p>ITAU: 9971728</p>
+                                    <LandmarkIcon className="ml-3 h-5 w-5 text-slate-400" />
+                                    <span className="mx-3 font-semibold text-slate-600">Bank transfer</span>
+                                    <p className="text-sm text-slate-500">Demo account ending in 1728</p>
                                 </div>
                                 {formData.paymentMethod === 'bank' && (
                                     <div className="px-4 pb-4">
-                                        <p className="text-gray-400">Please transfer the total amount to the bank account and send your receipt to the following number: <br /> <a
+                                        <p className="text-slate-500">This is a simulated payment method for demo purposes. No transfer is required. If you want to discuss the project, contact me here: <br /> <a
                                             target="_blank" className="text-indigo-500 hover:underline"
                                             rel="noopener noreferrer"
                                             href="https://wa.me/+59895220063">+59895220063.</a>
                                         </p>
                                     </div>
                                 )}
-                                <p className="text-red-600 font-semibold m-4">
-                                    WARNING: This is only a demo template. Do not send any money—no purchases can be made on this site.
-                                </p>
                             </div>
-                            <div>
+                        </div>
+                        <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-4 py-4 text-sm font-medium text-amber-800">
+                            Demo only: do not enter real payment details and do not send any money.
+                        </div>
+                        <div>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg px-3 py-2 font-semibold transition-colors"
+                                    className="block w-full rounded-full bg-slate-950 px-4 py-3 font-semibold text-white transition-colors hover:bg-slate-800 disabled:bg-slate-300"
                                 >
-                                    <i className="mdi mdi-lock-outline mr-1"></i>
                                     {isSubmitting ? 'PROCESSING...' : 'PAY NOW'}
                                 </button>
-                            </div>
                         </div>
                     </div>
                 </div>

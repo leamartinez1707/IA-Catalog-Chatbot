@@ -2,9 +2,9 @@ import FavoritesList from "@/components/favorites/FavoritesList"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: 'My Favorites | SmartShopAI',
-    description: 'List of favorites added.',
-    keywords: 'favorites, wishlist, ecommerce, shopping, smartshopai',
+    title: 'Favorites | ShopSmart AI',
+    description: 'Review saved products and jump back into the buying flow when you are ready.',
+    keywords: 'favorites, wishlist, ecommerce, shopping, ShopSmart AI',
 }
 
 const FavoritesPage = () => {

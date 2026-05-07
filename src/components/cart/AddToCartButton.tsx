@@ -16,9 +16,9 @@ const AddToCartButton = ({ product }: { product: Product }) => {
     return (
         <Button
             onClick={() => handleAddToCart(product)}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+            className="h-11 w-full rounded-full bg-slate-950 text-white shadow-lg shadow-slate-950/10 hover:bg-slate-800"
         >
-            <ShoppingCart className="w-4 h-4 mr-2 text-white" />
+            <ShoppingCart className="mr-2 h-4 w-4 text-white" />
             Add to Cart
         </Button>
     )
