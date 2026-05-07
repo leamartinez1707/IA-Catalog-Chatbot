@@ -32,13 +32,16 @@ const initialMessage: ChatMessage = {
   product: null,
 };
 
-export const ChatAssistant = () => {
+type ChatAssistantProps = {
+  onClose: () => void;
+};
+
+export const ChatAssistant = ({ onClose }: ChatAssistantProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
   const addToCart = useAppStore((state) => state.addToCart);
-  const showChat = useAppStore((state) => state.showChat);
   const setShowChat = useAppStore((state) => state.setShowChat);
   const { products } = useProducts();
 
@@ -47,10 +50,23 @@ export const ChatAssistant = () => {
   const isSendingRef = useRef(false);
 
   useEffect(() => {
-    if (!showChat) {
-      setInputValue("");
-    }
-  }, [showChat]);
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -135,13 +151,15 @@ export const ChatAssistant = () => {
     setInputValue("");
   };
 
-  if (!showChat) {
-    return null;
-  }
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
-      <Card className="flex h-[680px] w-full max-w-3xl flex-col overflow-hidden border-slate-200 bg-white shadow-[0_30px_120px_-40px_rgba(15,23,42,0.55)] animate-scale-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm" role="presentation" onClick={onClose}>
+      <Card
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="assistant-title"
+        className="animate-scale-in flex h-[680px] w-full max-w-3xl flex-col overflow-hidden border-slate-200 bg-white shadow-[0_30px_120px_-40px_rgba(15,23,42,0.55)]"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -150,7 +168,7 @@ export const ChatAssistant = () => {
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base font-semibold">AI Catalog Concierge</h3>
+                  <h3 id="assistant-title" className="font-display text-base font-semibold">AI Catalog Concierge</h3>
                   <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-xs text-emerald-200">
                     Live product guidance
                   </span>
@@ -163,8 +181,9 @@ export const ChatAssistant = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setShowChat(false)}
+              onClick={onClose}
               className="text-white hover:bg-white/10 hover:text-white"
+              aria-label="Close assistant"
             >
               <X className="size-5" />
             </Button>
@@ -288,6 +307,7 @@ export const ChatAssistant = () => {
               onChange={(event) => setInputValue(event.target.value)}
               onKeyDown={handleKeyPress}
               maxLength={180}
+              aria-label="Write a message for the shopping assistant"
               placeholder="Example: I need something premium for a home office under $200"
               className="flex-1 border-slate-300"
             />

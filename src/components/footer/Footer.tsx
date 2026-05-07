@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-10 sm:px-6 lg:flex-row lg:justify-between lg:px-8">
         <div className="max-w-xl space-y-4">
           <p className="text-sm uppercase tracking-[0.24em] text-sky-300">ShopSmart AI</p>
-          <h2 className="text-2xl font-semibold text-white">
+          <h2 className="font-display text-2xl font-semibold text-white">
             Smarter product discovery, powered by conversational AI.
           </h2>
           <p className="text-sm leading-7 text-slate-400">

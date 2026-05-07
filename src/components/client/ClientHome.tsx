@@ -1,9 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { ArrowRight, MessageCircle, Sparkles, Star, Zap } from "lucide-react";
 import ProductCatalog from "@/components/products/ProductsCatalog";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store";
+import type { Product } from "@/types";
 
 const features = [
   { icon: Sparkles, label: "AI-powered recommendations" },
@@ -11,12 +13,25 @@ const features = [
   { icon: Star,      label: "Curated catalog" },
 ];
 
-const ClientHome = () => {
+const CatalogSkeleton = () => (
+  <div className="space-y-8" aria-hidden>
+    <div className="h-52 animate-pulse rounded-[1.75rem] bg-slate-100" />
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="h-96 animate-pulse rounded-[1.75rem] bg-slate-100" />
+      ))}
+    </div>
+  </div>
+);
+
+interface ClientHomeProps {
+  products: Product[];
+}
+
+const ClientHome = ({ products }: ClientHomeProps) => {
   const setShowChat = useAppStore((state) => state.setShowChat);
-  const clearFilters = useAppStore((state) => state.clearFilters);
 
   const scrollToCatalog = () => {
-    clearFilters();
     document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -35,7 +50,7 @@ const ClientHome = () => {
               Powered by OpenAI
             </div>
 
-            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="font-display text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               Shop smarter with{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 AI guidance
@@ -80,7 +95,9 @@ const ClientHome = () => {
 
       {/* Catalog */}
       <section id="catalog" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <ProductCatalog />
+        <Suspense fallback={<CatalogSkeleton />}>
+          <ProductCatalog products={products} />
+        </Suspense>
       </section>
     </div>
   );

@@ -267,11 +267,11 @@ const Checkout = () => {
                                     </label>
                                     <LandmarkIcon className="ml-3 h-5 w-5 text-slate-400" />
                                     <span className="mx-3 font-semibold text-slate-600">Bank transfer</span>
-                                    <p>ITAU: 9971728</p>
+                                    <p className="text-sm text-slate-500">Demo account ending in 1728</p>
                                 </div>
                                 {formData.paymentMethod === 'bank' && (
                                     <div className="px-4 pb-4">
-                                        <p className="text-slate-500">Please transfer the total amount to the bank account and send your receipt to the following number: <br /> <a
+                                        <p className="text-slate-500">This is a simulated payment method for demo purposes. No transfer is required. If you want to discuss the project, contact me here: <br /> <a
                                             target="_blank" className="text-indigo-500 hover:underline"
                                             rel="noopener noreferrer"
                                             href="https://wa.me/+59895220063">+59895220063.</a>
@@ -281,7 +281,7 @@ const Checkout = () => {
                             </div>
                         </div>
                         <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-4 py-4 text-sm font-medium text-amber-800">
-                            WARNING: This is only a demo checkout. Do not send any money and do not use real payment details.
+                            Demo only: do not enter real payment details and do not send any money.
                         </div>
                         <div>
                                 <button

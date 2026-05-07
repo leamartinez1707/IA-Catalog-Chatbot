@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,15 +19,34 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   const router = useRouter();
 
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex h-screen items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
-      <Card className="flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white py-0 shadow-[0_30px_80px_-35px_rgba(15,23,42,0.45)] md:h-[820px]">
+    <div className="fixed inset-0 z-50 flex h-screen items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm" role="presentation" onClick={onClose}>
+      <Card role="dialog" aria-modal="true" aria-labelledby="shopping-cart-title" className="flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white py-0 shadow-[0_30px_80px_-35px_rgba(15,23,42,0.45)] md:h-[820px]" onClick={(event) => event.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-slate-950">Shopping Cart</h2>
+            <h2 id="shopping-cart-title" className="text-xl font-semibold tracking-tight text-slate-950" style={{ fontFamily: "var(--font-display)" }}>Shopping Cart</h2>
             <p className="text-sm text-slate-500">{items.length} {items.length === 1 ? 'item' : 'items'} selected</p>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close shopping cart">
             <X className="w-5 h-5" />
           </Button>
         </div>

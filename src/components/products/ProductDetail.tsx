@@ -1,36 +1,32 @@
-'use client'
+﻿'use client'
 
-import { useProducts } from "@/hooks/products/useProducts"
 import Image from "next/image"
-import { useParams } from "next/navigation"
 import AddToCartButton from "../cart/AddToCartButton"
 import { ArrowLeft, BadgeCheck, MessageCircle, ShieldCheck, Star } from "lucide-react"
 import SuggestedProducts from "./SuggestedProducts"
 import Link from "next/link"
+import type { Product } from "@/types"
 
-const ProductDetail = () => {
+interface ProductDetailProps {
+    product: Product | null
+    products: Product[]
+}
 
-    const { id } = useParams()
-    const { products, isLoading, error } = useProducts()
-
-    if (isLoading) {
-        return <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-14 text-center text-slate-500 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.35)]">Loading product...</div>
-    }
-
-    if (error) {
-        return <div className="rounded-[2rem] border border-rose-200 bg-rose-50 px-6 py-14 text-center text-rose-600">Error loading product details.</div>
-    }
-
-    if (!products || products.length === 0) {
-        return <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-14 text-center text-slate-500 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.35)]">No products available</div>
-    }
-
-    const product = products.find((prd) => prd.id === String(id))
+const ProductDetail = ({ product, products }: ProductDetailProps) => {
     if (!product) {
-        return <div className="rounded-[2rem] border border-rose-200 bg-rose-50 px-6 py-14 text-center text-rose-600">Product not found</div>
+        return (
+            <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+                <div className="rounded-[2rem] border border-rose-200 bg-rose-50 px-6 py-14 text-center text-rose-600">
+                    Product not found.{" "}
+                    <Link href="/" className="font-medium underline underline-offset-2 hover:text-rose-700">
+                        Go back to the catalog
+                    </Link>
+                </div>
+            </div>
+        )
     }
 
-    const features = product.features.split(',').map((feature) => feature.trim()).filter(Boolean)
+    const features = product.features.split(',').map((f) => f.trim()).filter(Boolean)
 
     return (
         <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
@@ -50,6 +46,7 @@ const ProductDetail = () => {
                             alt={product.name}
                             src={product.image}
                             className="h-full w-full object-cover"
+                            priority
                         />
                         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/55 to-transparent" />
                         <div className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/92 px-4 py-2 text-sm font-medium text-slate-700 shadow-lg backdrop-blur">
@@ -87,7 +84,7 @@ const ProductDetail = () => {
                         </div>
 
                         <div className="mt-5 space-y-4">
-                            <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{product.name}</h1>
+                            <h1 className="font-display text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{product.name}</h1>
                             <p className="max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">{product.description}</p>
                         </div>
 
@@ -122,7 +119,7 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-[0_25px_60px_-35px_rgba(15,23,42,0.28)] sm:p-8">
-                        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">What stands out</h2>
+                        <h2 className="font-display text-2xl font-semibold tracking-tight text-slate-950">What stands out</h2>
                         <div className="mt-5 grid gap-3">
                             {features.map((feature, index) => (
                                 <div key={index} className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700">
@@ -135,7 +132,7 @@ const ProductDetail = () => {
                 </div>
             </div>
 
-            <SuggestedProducts category={product.category} id={product.id} />
+            <SuggestedProducts category={product.category} id={product.id} products={products} />
         </div>
     )
 }
